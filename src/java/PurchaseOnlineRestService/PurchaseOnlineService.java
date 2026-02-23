@@ -3,6 +3,8 @@ package PurchaseOnlineRestService;
 import SMLWebService.Routine;
 import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.MessageDigest;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -57,8 +59,8 @@ public class PurchaseOnlineService {
     public Response addItemToCart(
             String data
     ) throws Exception {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
 
         __objResponse.put("success", false);
@@ -108,9 +110,9 @@ public class PurchaseOnlineService {
                     _divide_value = objJSData.has("divide_value") ? objJSData.getString("divide_value") : "1";
                     _ratio = objJSData.has("ratio") ? objJSData.getString("ratio") : "1";
 
-                    __deleteQuery.append("delete from ws_cart_order_temp where item_code = '" + _item_code + "' and unit_code = '" + _unit_code + "' and barcode = '" + _barcode + "' and cust_code = '" + __cust_code + "' and wh_code = '" + _wh_code + "' and shelf_code = '" + _shelf_code + "'   ;");
+                    __deleteQuery.append("delete from ps_cart_order_temp where item_code = '" + _item_code + "' and unit_code = '" + _unit_code + "' and barcode = '" + _barcode + "' and cust_code = '" + __cust_code + "' and wh_code = '" + _wh_code + "' and shelf_code = '" + _shelf_code + "'   ;");
 
-                    __query_builder.append("insert into ws_cart_order_temp (cust_code,guid_code,item_code,item_name,unit_code,barcode,qty,price,wh_code,shelf_code,creator_code,create_datetime,stand_value,divide_value,ratio) values ('" + __cust_code + "','" + _guid_code + "','" + _item_code + "','" + _item_name + "','" + _unit_code + "','" + _barcode + "'"
+                    __query_builder.append("insert into ps_cart_order_temp (cust_code,guid_code,item_code,item_name,unit_code,barcode,qty,price,wh_code,shelf_code,creator_code,create_datetime,stand_value,divide_value,ratio) values ('" + __cust_code + "','" + _guid_code + "','" + _item_code + "','" + _item_name + "','" + _unit_code + "','" + _barcode + "'"
                             + ",'" + _qty + "','" + _price + "','" + _wh_code + "','" + _shelf_code + "','" + __creator_code + "','now()','" + _stand_value + "','" + _divide_value + "','" + _ratio + "');");
 
                 }
@@ -143,19 +145,19 @@ public class PurchaseOnlineService {
     public Response getCartItemList(
             @QueryParam("cust_code") String strCustCode,
             @QueryParam("wh_code") String strWhCode) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
             _routine __routine = new _routine();
             Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
 
-//            String __strQUERY1 = "SELECT * from ws_cart_order_temp where cust_code = '" + strCustCode + "'";
+//            String __strQUERY1 = "SELECT * from ps_cart_order_temp where cust_code = '" + strCustCode + "'";
             String __strQUERY1 = "SELECT \n"
                     + "    w.*\n"
                     + "\n"
-                    + "FROM    ws_cart_order_temp w  WHERE \n"
+                    + "FROM    ps_cart_order_temp w  WHERE \n"
                     + "    w.cust_code = '" + strCustCode + "' and w.wh_code = '" + strWhCode + "' "
                     + "ORDER BY \n"
                     + "    w.item_code;";
@@ -205,8 +207,8 @@ public class PurchaseOnlineService {
     public Response getGroup(
             @QueryParam("search") String strSearch
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -251,8 +253,8 @@ public class PurchaseOnlineService {
     public Response getGroupSub(
             @QueryParam("search") String strSearch
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -297,8 +299,8 @@ public class PurchaseOnlineService {
     public Response getGroupSub2(
             @QueryParam("search") String strSearch
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -343,8 +345,8 @@ public class PurchaseOnlineService {
     public Response getBrand(
             @QueryParam("search") String strSearch
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -390,8 +392,8 @@ public class PurchaseOnlineService {
     public Response getCategory(
             @QueryParam("search") String strSearch
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -437,8 +439,8 @@ public class PurchaseOnlineService {
     public Response getDesign(
             @QueryParam("search") String strSearch
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -484,8 +486,8 @@ public class PurchaseOnlineService {
     public Response getModel(
             @QueryParam("search") String strSearch
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -531,15 +533,15 @@ public class PurchaseOnlineService {
     public Response getCartConfirm(
             @QueryParam("cust_code") String strCustCode,
             @QueryParam("sale_type") String strSaleType) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
             _routine __routine = new _routine();
             Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
 
-            String __strQUERY1 = "SELECT *,coalesce((select tax_type from ic_inventory where code = item_code),0) as tax_type  from ws_cart_order_temp where cust_code = '" + strCustCode + "'";
+            String __strQUERY1 = "SELECT *,coalesce((select tax_type from ic_inventory where code = item_code),0) as tax_type  from ps_cart_order_temp where cust_code = '" + strCustCode + "'";
 
             Statement __stmt1;
             ResultSet __rs1;
@@ -624,175 +626,267 @@ public class PurchaseOnlineService {
 
     @POST
     @Path("/sendorder")
-    public Response sendOrderSO(String data) throws Exception {
-        JSONObject __objResponse = new JSONObject();
-        __objResponse.put("success", false);
-        try {
+    public Response sendOrderSO(String data) {
+        JSONObject response = new JSONObject();
+        response.put("success", false);
 
-            String doc_date = "";
-            String send_date = "";
-            String doc_no = "";
-            String cust_code = "";
-            String branch_code = "";
-            String send_type = "";
-            String vat_rate = "0";
-            String total_value = "0";
-            String total_vat_value = "0";
-            String total_after_vat = "0";
-            String total_except_vat = "0";
-            String total_amount = "0";
-            String total_before_vat = "0";
-            String doc_time = "";
-            String address = "";
-            String address_name = "";
-            String creator_code = "";
-            String telephone = "";
-            String discount = "";
-            String discount_amount = "";
-            String total_discount = "0";
-            String remark = "";
-            String inquiry_type = "";
-            String sale_type = "";
-            String vat_type = "";
-            String logistic_area = "";
-            String latitude = "";
-            String emp_code = "";
-            JSONArray items = new JSONArray();
-            JSONArray wh_list = new JSONArray();
-            if (data != null) {
-                JSONObject objJSData = new JSONObject(data);
-                doc_date = objJSData.has("doc_date") ? objJSData.getString("doc_date") : "";
-                send_date = objJSData.has("doc_date") ? objJSData.getString("doc_date") : "";
-                send_type = objJSData.has("send_type") ? objJSData.getString("send_type") : "0";
-                doc_time = objJSData.has("doc_time") ? objJSData.getString("doc_time") : "";
-
-                doc_no = objJSData.has("doc_no") ? objJSData.getString("doc_no") : "";
-                cust_code = objJSData.has("cust_code") ? objJSData.getString("cust_code") : "";
-                branch_code = objJSData.has("branch_code") ? objJSData.getString("branch_code") : "0000";
-                vat_rate = "7";
-                total_value = objJSData.has("total_value") ? objJSData.getString("total_value") : "0";
-                total_except_vat = objJSData.has("total_except_vat") ? objJSData.getString("total_except_vat") : "0";
-                total_after_vat = objJSData.has("total_after_vat") ? objJSData.getString("total_after_vat") : "0";
-                total_amount = objJSData.has("total_amount") ? objJSData.getString("total_amount") : "0";
-                total_before_vat = (Float.parseFloat(total_after_vat) * 100 / (100 + Float.parseFloat(vat_rate))) + "";
-                total_vat_value = (Float.parseFloat(total_after_vat) - Float.parseFloat(total_before_vat)) + "";
-                address = objJSData.has("address") ? objJSData.getString("address") : "";
-                address_name = objJSData.has("address_name") ? objJSData.getString("address_name") : "";
-                emp_code = objJSData.has("emp_code") ? objJSData.getString("emp_code") : "";
-                creator_code = objJSData.has("cust_code") ? objJSData.getString("cust_code") : "";
-                telephone = objJSData.has("telephone") ? objJSData.getString("telephone") : "";
-                total_discount = "0";
-                remark = objJSData.has("remark") ? objJSData.getString("remark") : "";
-                sale_type = objJSData.has("sale_type") ? objJSData.getString("sale_type") : "0";
-                inquiry_type = objJSData.has("inquiry_type") ? objJSData.getString("inquiry_type") : "0";
-
-                if (sale_type.equals("1")) {
-                    inquiry_type = "2";
-                } else {
-                    inquiry_type = "1";
-                }
-
-                vat_type = "1";
-                logistic_area = "";
-                latitude = "0";
-                if (objJSData.has("items")) {
-                    items = objJSData.getJSONArray("items");
-                }
-            }
-
-            UUID uuid = UUID.randomUUID();
-            String strGUID = uuid.toString();
-            String strProvider = "DATA";
-            String strDatabaseName = "data2";
-
-            if (cust_code.equals("")) {
-                return Response.status(400).entity("{ERROR: Customer Code Not Found}").build();
-            }
-
-            StringBuilder __result = new StringBuilder();
-            _routine __routine = new _routine();
-            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
-            String credit_day = "0";
-            String credit_date = doc_date;
-            String expier_date = doc_date;
-            String expire_day = "0";
-            if (items.length() > 0) {
-
-                String __strQUERY0 = "select doc_no from ic_trans where doc_no = '" + doc_no + "' and doc_format_code = 'QT'";
-                System.out.println("__strQUERY0" + __strQUERY0);
-                Statement __stmt0;
-                ResultSet __rs0;
-                __stmt0 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                __rs0 = __stmt0.executeQuery(__strQUERY0);
-                __rs0.next();
-                int row0 = __rs0.getRow();
-                System.out.println("row0 " + row0);
-                if (row0 == 0) {
-
-                    String __strQUERYMain = "insert into ic_trans "
-                            + "(inquiry_type,vat_type,trans_type,trans_flag,doc_date,doc_no,tax_doc_no,tax_doc_date,cust_code,branch_code,wh_from,send_date,vat_rate,total_value,"
-                            + "total_vat_value,total_after_vat,total_amount,\n"
-                            + "total_before_vat,doc_time,doc_format_code,creator_code,sale_code,total_discount,remark,send_type,total_except_vat) "
-                            + "values "
-                            + "('" + inquiry_type + "','" + vat_type + "',2,30,'" + doc_date + "','" + doc_no + "','" + doc_no + "','" + doc_date + "','" + cust_code + "','" + branch_code + "','" + branch_code + "','" + send_date + "','" + vat_rate + "','" + total_value + "','" + total_vat_value + "','" + total_after_vat + "','" + total_amount + "','" + total_before_vat + "','" + doc_time + "','QT','" + creator_code + "','" + emp_code + "','" + total_discount + "','" + remark + "','" + send_type + "','" + total_except_vat + "')";
-                    System.out.println("__strQUERYMain" + __strQUERYMain);
-                    Statement __stmtMain;
-                    __stmtMain = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                    __stmtMain.executeUpdate(__strQUERYMain);
-                    __stmtMain.close();
-
-                    String __strShipment = "insert into ic_trans_shipment (doc_no,doc_date,trans_flag,cust_code,transport_name,transport_address,transport_telephone,logistic_area,latitude) values "
-                            + "('" + doc_no + "','" + doc_date + "',30,'" + cust_code + "','" + address + "','" + address_name + "','" + telephone + "','" + logistic_area + "','" + latitude + "')";
-                    Statement __stmtShipment;
-                    System.out.println("" + __strShipment);
-                    __stmtShipment = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                    __stmtShipment.executeUpdate(__strShipment);
-                    __stmtShipment.close();
-
-                    String __strQUERYz = "delete from ic_trans_detail where doc_no = '" + doc_no + "' ";
-                    System.out.println("" + __strQUERYz);
-                    Statement __stmtz;
-                    __stmtz = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                    __stmtz.executeUpdate(__strQUERYz);
-                    __stmtz.close();
-
-                    for (int i = 0; i < items.length(); i++) {
-                        JSONObject objJSDataItem = items.getJSONObject(i);
-
-                        String __strQUERY1 = "insert into ic_trans_detail (inquiry_type,vat_type,trans_type,trans_flag,doc_date,doc_no,cust_code,item_code,item_name,unit_code,qty,price,sum_amount,line_number,remark,wh_code,shelf_code,stand_value,divide_value,ratio,doc_time,doc_date_calc,discount,discount_amount) values "
-                                + "('" + inquiry_type + "','" + vat_type + "',2,30,'" + doc_date + "','" + doc_no + "','" + cust_code + "','" + objJSDataItem.getString("item_code") + "','" + objJSDataItem.getString("item_name") + "','" + objJSDataItem.getString("unit_code") + "','" + objJSDataItem.getString("qty") + "','" + objJSDataItem.getString("price") + "','" + objJSDataItem.getString("sum_amount") + "',"
-                                + "'" + i + "','','" + objJSDataItem.getString("wh_code") + "','" + objJSDataItem.getString("shelf_code") + "','" + objJSDataItem.getString("stand_value") + "','" + objJSDataItem.getString("divide_value") + "','" + objJSDataItem.getString("ratio") + "','" + doc_time + "','" + doc_date + "','','0');";
-                        System.out.println("" + __strQUERY1);
-                        Statement __stmt1;
-                        __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                        __stmt1.executeUpdate(__strQUERY1);
-                        __stmt1.close();
-
-                    }
-
-                    String __strQUERYdelete = "delete from ws_cart_order_temp where cust_code = '" + cust_code + "'";
-
-                    System.out.println("" + __strQUERYdelete);
-                    Statement __stmtdelete;
-                    __stmtdelete = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                    __stmtdelete.executeUpdate(__strQUERYdelete);
-                    __stmtdelete.close();
-
-                    __objResponse.put("msg", "success");
-                    __objResponse.put("success", true);
-
-                    __rs0.close();
-                    __stmt0.close();
-                } else {
-                    __objResponse.put("msg", "Duplicate Doc No.");
-                    __objResponse.put("success", false);
-                }
-                __conn.close();
-            }
-        } catch (JSONException ex) {
-            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        if (data == null || data.isEmpty()) {
+            return badRequest("Request body is empty");
         }
-        return Response.ok(__objResponse.toString(), MediaType.APPLICATION_JSON).build();
+
+        try {
+            // --- 1. Parse Input ---
+            JSONObject input = new JSONObject(data);
+
+            String docNo = getStr(input, "doc_no", "");
+            String custCode = getStr(input, "cust_code", "");
+            String branchCode = getStr(input, "branch_code", "0000");
+            String docDateStr = getStr(input, "doc_date", "");       // "yyyy-MM-dd"
+            String docTime = getStr(input, "doc_time", "");       // "HH:mm"
+
+            String empCode = getStr(input, "emp_code", "");
+            String creatorCode = empCode;
+            String remark = getStr(input, "remark", "");
+            String saleType = getStr(input, "sale_type", "0");
+
+            BigDecimal vatRate = new BigDecimal("7");
+            BigDecimal totalValue = getBigDecimal(input, "total_value", BigDecimal.ZERO);
+            BigDecimal totalExceptVat = getBigDecimal(input, "total_except_vat", BigDecimal.ZERO);
+            BigDecimal totalAfterVat = getBigDecimal(input, "total_after_vat", BigDecimal.ZERO);
+            BigDecimal totalAmount = getBigDecimal(input, "total_amount", BigDecimal.ZERO);
+
+            // คำนวณ total_before_vat, total_vat_value (ใช้ BigDecimal แทน Float เพื่อความแม่นยำ)
+            BigDecimal totalBeforeVat = totalAfterVat.multiply(new BigDecimal("100"))
+                    .divide(new BigDecimal("107"), 4, RoundingMode.HALF_UP);
+            BigDecimal totalVatValue = totalAfterVat.subtract(totalBeforeVat);
+
+            // inquiry_type ตาม sale_type
+            int inquiryType = "1".equals(saleType) ? 2 : 1;
+
+            JSONArray items = input.has("items") ? input.getJSONArray("items") : new JSONArray();
+
+            // --- 2. Validate ---
+            if (custCode.isEmpty()) {
+                return badRequest("Customer code is required");
+            }
+            if (docNo.isEmpty()) {
+                return badRequest("Document number is required");
+            }
+            if (docDateStr.isEmpty()) {
+                return badRequest("Document date is required");
+            }
+            if (items.length() == 0) {
+                return badRequest("Items are required");
+            }
+
+            java.sql.Date docDate = java.sql.Date.valueOf(docDateStr); // yyyy-MM-dd
+
+            // --- 3. Database ---
+            String strProvider = "DEMO";
+            String strDatabaseName = "demo1";
+
+            _routine routine = new _routine();
+            try (Connection conn = routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider))) {
+
+                // Check duplicate (PK = doc_no + trans_flag)
+                if (isDuplicateDoc(conn, docNo)) {
+                    response.put("msg", "Duplicate Doc No.");
+                    return Response.ok(response.toString(), MediaType.APPLICATION_JSON).build();
+                }
+
+                conn.setAutoCommit(false);
+                try {
+                    insertHeader(conn, docNo, docDate, docTime, custCode, branchCode,
+                            vatRate, totalValue, totalBeforeVat, totalVatValue,
+                            totalAfterVat, totalExceptVat, totalAmount,
+                            inquiryType, creatorCode, empCode, remark);
+
+                    insertDetails(conn, items, docNo, docDate, docTime, custCode);
+
+                    clearCartTemp(conn, custCode);
+
+                    conn.commit();
+                    response.put("msg", "success");
+                    response.put("success", true);
+                } catch (Exception ex) {
+                    conn.rollback();
+                    throw ex;
+                } finally {
+                    conn.setAutoCommit(true);
+                }
+            }
+
+        } catch (JSONException ex) {
+            return badRequest("Invalid JSON: " + ex.getMessage());
+        } catch (IllegalArgumentException ex) {
+            return badRequest("Invalid data format: " + ex.getMessage());
+        } catch (SQLException ex) {
+
+            return Response.status(500).entity("{\"error\": \"Database error\"}").build();
+        } catch (Exception ex) {
+
+            return Response.status(500).entity("{\"error\": \"Internal server error\"}").build();
+        }
+
+        return Response.ok(response.toString(), MediaType.APPLICATION_JSON).build();
+    }
+
+// ============================================================
+// Database Methods
+// ============================================================
+    private boolean isDuplicateDoc(Connection conn, String docNo) throws SQLException {
+        // ic_trans PK = (doc_no, trans_flag)
+        String sql = "SELECT 1 FROM ic_trans WHERE doc_no = ? AND trans_flag = 2 LIMIT 1";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, docNo);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    private void insertHeader(Connection conn, String docNo, java.sql.Date docDate, String docTime,
+            String custCode, String branchCode,
+            BigDecimal vatRate, BigDecimal totalValue,
+            BigDecimal totalBeforeVat, BigDecimal totalVatValue,
+            BigDecimal totalAfterVat, BigDecimal totalExceptVat, BigDecimal totalAmount,
+            int inquiryType, String creatorCode, String empCode,
+            String remark) throws SQLException {
+
+        String sql = "INSERT INTO ic_trans ("
+                + "trans_type, trans_flag, " // smallint, smallint
+                + "doc_date, doc_time, doc_no, " // date, varchar(5), varchar(25)
+                + "inquiry_type, vat_type, " // smallint, smallint
+                + "cust_code, branch_code, vat_rate, " // varchar(25), varchar(25), numeric
+                + "total_value, total_before_vat, total_vat_value, " // numeric x3
+                + "total_after_vat, total_except_vat, " // numeric x2
+                + "total_amount, balance_amount, " // numeric x2
+                + "user_request, approve_status, " // varchar(25), smallint
+                + "doc_format_code, " // varchar(25)
+                + "remark, creator_code, sale_code, " // varchar(255), varchar(255), varchar(25)
+                + "create_datetime" // timestamp
+                + ") VALUES ("
+                + "1, 2, "
+                + "?, ?, ?, "
+                + "?, 1, "
+                + "?, ?, ?, "
+                + "?, ?, ?, "
+                + "?, ?, "
+                + "?, ?, "
+                + "?, 0, "
+                + "'PR', "
+                + "?, ?, ?, "
+                + "NOW()"
+                + ")";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            int i = 1;
+            ps.setDate(i++, docDate);                  // doc_date          date
+            ps.setString(i++, docTime);                // doc_time          varchar(5)
+            ps.setString(i++, docNo);                  // doc_no            varchar(25)
+            ps.setShort(i++, (short) inquiryType);     // inquiry_type      smallint
+            ps.setString(i++, custCode);               // cust_code         varchar(25)
+            ps.setString(i++, branchCode);             // branch_code       varchar(25)
+            ps.setBigDecimal(i++, vatRate);            // vat_rate          numeric
+            ps.setBigDecimal(i++, totalValue);         // total_value       numeric
+            ps.setBigDecimal(i++, totalBeforeVat);     // total_before_vat  numeric
+            ps.setBigDecimal(i++, totalVatValue);      // total_vat_value   numeric
+            ps.setBigDecimal(i++, totalAfterVat);      // total_after_vat   numeric
+            ps.setBigDecimal(i++, totalExceptVat);     // total_except_vat  numeric
+            ps.setBigDecimal(i++, totalAmount);        // total_amount      numeric
+            ps.setBigDecimal(i++, totalAmount);        // balance_amount    numeric (= total_amount)
+            ps.setString(i++, creatorCode);            // user_request      varchar(25)
+            ps.setString(i++, remark);                 // remark            varchar(255)
+            ps.setString(i++, creatorCode);            // creator_code      varchar(255)
+            ps.setString(i++, empCode);                // sale_code         varchar(25)
+            ps.executeUpdate();
+        }
+    }
+
+    private void insertDetails(Connection conn, JSONArray items,
+            String docNo, java.sql.Date docDate, String docTime,
+            String custCode) throws SQLException {
+
+        String sql = "INSERT INTO ic_trans_detail ("
+                + "trans_type, trans_flag, " // smallint, smallint
+                + "doc_date, doc_time, doc_no, " // date, varchar(5), varchar(25)
+                + "cust_code, " // varchar(25)
+                + "item_code, item_name, unit_code, " // varchar(25), varchar(255), varchar(25)
+                + "qty, price, sum_amount, " // numeric x3
+                + "line_number, " // integer
+                + "stand_value, divide_value, ratio, " // numeric x3
+                + "calc_flag, vat_type, " // integer, integer
+                + "doc_date_calc, doc_time_calc, " // date, varchar(5)
+                + "create_datetime" // timestamp
+                + ") VALUES ("
+                + "1, 2, "
+                + "?, ?, ?, "
+                + "?, "
+                + "?, ?, ?, "
+                + "?, ?, ?, "
+                + "?, "
+                + "?, ?, ?, "
+                + "1, 1, "
+                + "?, ?, "
+                + "NOW()"
+                + ")";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            for (int n = 0; n < items.length(); n++) {
+                JSONObject item = items.getJSONObject(n);
+
+                int i = 1;
+                ps.setDate(i++, docDate);                                             // doc_date        date
+                ps.setString(i++, docTime);                                           // doc_time        varchar(5)
+                ps.setString(i++, docNo);                                             // doc_no          varchar(25)
+                ps.setString(i++, custCode);                                          // cust_code       varchar(25)
+                ps.setString(i++, item.getString("item_code"));                       // item_code       varchar(25)
+                ps.setString(i++, item.getString("item_name"));                       // item_name       varchar(255)
+                ps.setString(i++, item.getString("unit_code"));                       // unit_code       varchar(25)
+                ps.setBigDecimal(i++, new BigDecimal(item.getString("qty")));          // qty             numeric
+                ps.setBigDecimal(i++, new BigDecimal(item.getString("price")));        // price           numeric
+                ps.setBigDecimal(i++, new BigDecimal(item.getString("sum_amount")));   // sum_amount      numeric
+                ps.setInt(i++, n);                                                    // line_number     integer
+                ps.setBigDecimal(i++, new BigDecimal(item.getString("stand_value")));  // stand_value     numeric
+                ps.setBigDecimal(i++, new BigDecimal(item.getString("divide_value"))); // divide_value    numeric
+                ps.setBigDecimal(i++, new BigDecimal(item.getString("ratio")));        // ratio           numeric
+                ps.setDate(i++, docDate);                                             // doc_date_calc   date
+                ps.setString(i++, docTime);                                           // doc_time_calc   varchar(5)
+
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
+
+    private void clearCartTemp(Connection conn, String custCode) throws SQLException {
+        String sql = "DELETE FROM ps_cart_order_temp WHERE cust_code = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, custCode);
+            ps.executeUpdate();
+        }
+    }
+
+// ============================================================
+// Utility
+// ============================================================
+    private String getStr(JSONObject obj, String key, String defaultValue) {
+        return obj.has(key) ? obj.getString(key) : defaultValue;
+    }
+
+    private BigDecimal getBigDecimal(JSONObject obj, String key, BigDecimal defaultValue) {
+        if (!obj.has(key)) {
+            return defaultValue;
+        }
+        String val = obj.getString(key);
+        return (val == null || val.isEmpty()) ? defaultValue : new BigDecimal(val);
+    }
+
+    private Response badRequest(String message) {
+        return Response.status(400)
+                .entity("{\"error\": \"" + message + "\"}")
+                .type(MediaType.APPLICATION_JSON)
+                .build();
     }
 
     @POST
@@ -873,8 +967,8 @@ public class PurchaseOnlineService {
 
             UUID uuid = UUID.randomUUID();
             String strGUID = uuid.toString();
-            String strProvider = "DATA";
-            String strDatabaseName = "data2";
+            String strProvider = "DEMO";
+            String strDatabaseName = "demo1";
 
             StringBuilder __result = new StringBuilder();
             _routine __routine = new _routine();
@@ -1037,8 +1131,8 @@ public class PurchaseOnlineService {
 
             UUID uuid = UUID.randomUUID();
             String strGUID = uuid.toString();
-            String strProvider = "DATA";
-            String strDatabaseName = "data2";
+            String strProvider = "DEMO";
+            String strDatabaseName = "demo1";
 
             StringBuilder __result = new StringBuilder();
             _routine __routine = new _routine();
@@ -1125,7 +1219,7 @@ public class PurchaseOnlineService {
         __objResponse.put("success", false);
         try {
             _routine __routine = new _routine();
-            Connection __conn = __routine._connect("data2", _global.FILE_CONFIG("DATA"));
+            Connection __conn = __routine._connect("demo1", _global.FILE_CONFIG("DEMO"));
             String __strQUERY1 = "SELECT code as user_code, name_1 as user_name FROM erp_user WHERE upper(code)=upper('" + strUserCode + "') AND password='" + strPassword + "' ORDER BY code";
 
             Statement __stmt1;
@@ -1158,8 +1252,8 @@ public class PurchaseOnlineService {
     public Response logincus(
             @QueryParam("user_code") String strUserCode,
             @QueryParam("password") String strPassword) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1202,8 +1296,8 @@ public class PurchaseOnlineService {
             @QueryParam("status") String status,
             @QueryParam("cust_code") String strCust,
             @QueryParam("item_code") String strItem) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1234,8 +1328,8 @@ public class PurchaseOnlineService {
     public Response getAdvancePayment(
             @QueryParam("cust_code") String strCust
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1300,8 +1394,8 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust,
             @QueryParam("status") String strStatus
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1518,7 +1612,7 @@ public class PurchaseOnlineService {
                         }
                         obj.put("wh_code", __rs1.getString("wh_code"));
                         obj.put("wh_name", __rs1.getString("wh_name"));
-                        obj.put("sale_type", sale_type );
+                        obj.put("sale_type", sale_type);
 
                         obj.put("doc_no", __rs1.getString("doc_no"));
                         obj.put("doc_date", __rs1.getString("doc_date"));
@@ -1561,7 +1655,7 @@ public class PurchaseOnlineService {
                         }
                         obj.put("wh_code", __rs1.getString("wh_code"));
                         obj.put("wh_name", __rs1.getString("wh_name"));
-                        obj.put("sale_type", sale_type );
+                        obj.put("sale_type", sale_type);
 
                         obj.put("doc_no", __rs1.getString("doc_no"));
                         obj.put("doc_date", __rs1.getString("doc_date"));
@@ -1602,7 +1696,7 @@ public class PurchaseOnlineService {
                     }
                     obj.put("wh_code", __rs1.getString("wh_code"));
                     obj.put("wh_name", __rs1.getString("wh_name"));
-                    obj.put("sale_type", sale_type );
+                    obj.put("sale_type", sale_type);
 
                     obj.put("doc_no", __rs1.getString("doc_no"));
                     obj.put("doc_date", __rs1.getString("doc_date"));
@@ -1650,8 +1744,8 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust,
             @QueryParam("doc_no") String strDocNo
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1765,8 +1859,8 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust,
             @QueryParam("trans_flag") String strTrans
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1942,12 +2036,659 @@ public class PurchaseOnlineService {
     }
 
     @GET
+    @Path("/sendApprove")
+    public Response sendApprove(
+            @QueryParam("docno") String strDocno,
+            @QueryParam("docref") String strDocref,
+            @QueryParam("empcode") String StrEmpcode
+    ) {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            String strProvider = "DEMO";
+            String strDatabaseName = "demo1";
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY0 = "insert into ic_trans ("
+                    + "trans_type, trans_flag, " // smallint, smallint
+                    + "doc_date, doc_time, doc_no,doc_ref, " // date, varchar(5), varchar(25)
+                    + "inquiry_type, vat_type, " // smallint, smallint
+                    + "cust_code, branch_code, vat_rate, "
+                    + "user_request, approve_status, " // varchar(25), smallint
+                    + "doc_format_code, " // varchar(25)
+                    + "remark, creator_code, " // varchar(255), varchar(255), varchar(25)
+                    + "create_datetime" // timestamp
+                    + ") select 1, 4, " // smallint, smallint
+                    + "doc_date, doc_time,'" + strDocno + "', '" + strDocref + "', " // date, varchar(5), varchar(25)
+                    + "inquiry_type, vat_type, " // smallint, smallint
+                    + "cust_code, branch_code, vat_rate, "
+                    + "user_request, 0, " // varchar(25), smallint
+                    + "'PRA', " // varchar(25)
+                    + "remark, '" + StrEmpcode + "', " // varchar(255), varchar(255), varchar(25)
+                    + "'now()' from ic_trans WHERE doc_no ='" + strDocref + "' and trans_flag = 2 ;";
+            System.out.println("__strQUERY0" + __strQUERY0);
+            Statement __stmt0;
+
+            __stmt0 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __stmt0.executeUpdate(__strQUERY0);
+            __stmt0.close();
+
+            String __strQUERYdetail = "insert into ic_trans_detail ("
+                    + "trans_type, trans_flag, " // smallint, smallint
+                    + "doc_date, doc_time, doc_no, " // date, varchar(5), varchar(25)
+                    + "cust_code, " // varchar(25)
+                    + "item_code, item_name, unit_code, " // varchar(25), varchar(255), varchar(25)
+                    + "qty, price, sum_amount, " // numeric x3
+                    + "line_number, " // integer
+                    + "stand_value, divide_value, ratio, " // numeric x3
+                    + "calc_flag, vat_type, " // integer, integer
+                    + "doc_date_calc, doc_time_calc, " // date, varchar(5)
+                    + "create_datetime) select 1, 4, " // smallint, smallint
+                    + "doc_date, doc_time,'" + strDocno + "', " // date, varchar(5), varchar(25)
+                    + "cust_code, item_code, item_name, unit_code, " // varchar(25), varchar(255), varchar(25)
+                    + "qty, price, sum_amount, " // numeric x3
+                    + "line_number, " // integer
+                    + "stand_value, divide_value, ratio, " // numeric x3
+                    + "1, vat_type, " // integer, integer
+                    + "doc_date_calc, doc_time_calc, " // date, varchar(5)
+                    + "'now()' from ic_trans_detail WHERE doc_no ='" + strDocref + "' ;";
+            System.out.println("__strQUERYdetail " + __strQUERYdetail);
+            Statement __stmtdetail;
+
+            __stmtdetail = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __stmtdetail.executeUpdate(__strQUERYdetail);
+            __stmtdetail.close();
+
+            String __strQUERY1 = "update ic_trans set approve_status=1,approve_code='" + StrEmpcode + "',approve_date='now()',doc_success=1,used_status=1 WHERE doc_no ='" + strDocref + "' ;";
+            System.out.println("__strQUERY1");
+            Statement __stmt1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __stmt1.executeUpdate(__strQUERY1);
+            __stmt1.close();
+
+            __conn.close();
+
+            __objResponse.put("success", true);
+            __objResponse.put("data", new JSONArray());
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/cancelApprove")
+    public Response cancelApprove(
+            @QueryParam("docno") String strDocno,
+            @QueryParam("docref") String strDocref,
+            @QueryParam("empcode") String StrEmpcode) {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            String strProvider = "DEMO";
+            String strDatabaseName = "demo1";
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "update ic_trans set approve_status=2,approve_code='" + StrEmpcode + "',doc_success=1,used_status=1,approve_date='now()' WHERE doc_no ='" + strDocref + "' ;";
+            System.out.println("__strQUERY1");
+            Statement __stmt1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __stmt1.executeUpdate(__strQUERY1);
+            __stmt1.close();
+            __conn.close();
+
+            __objResponse.put("success", true);
+            __objResponse.put("data", new JSONArray());
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getPRDocWaitApprove")
+    public Response getPRDocWaitApprove(
+            @QueryParam("search") String strSearch,
+            @QueryParam("fromdate") String strFromDate,
+            @QueryParam("todate") String strTodate
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String where = "";
+
+            if (!strFromDate.equals("") && !strTodate.equals("")) {
+                where += " and doc_date between '" + strFromDate + "' and '" + strTodate + "' ";
+            }
+            if (!strSearch.equals("")) {
+                where = "";
+                where += " and (doc_no like '%" + strSearch + "%' or cust_code like '%" + strSearch + "%' or user_request like '%" + strSearch + "%') ";
+            }
+
+            // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
+            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,user_request,approve_status,remark,creator_code from ic_trans where doc_format_code = 'PR' and last_status = 0 and approve_status = 0 and doc_success = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            System.out.println(__strQUERY1);
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+
+            while (__rs1.next()) {
+                JSONObject obj = new JSONObject();
+
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("user_request", __rs1.getString("user_request"));
+                obj.put("remark", __rs1.getString("remark"));
+
+                __jsonArr.put(obj);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", __jsonArr);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getPRDocApproved")
+    public Response getPRDocApproved(
+            @QueryParam("search") String strSearch,
+            @QueryParam("fromdate") String strFromDate,
+            @QueryParam("todate") String strTodate
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String where = "";
+
+            if (!strFromDate.equals("") && !strTodate.equals("")) {
+                where += " and doc_date between '" + strFromDate + "' and '" + strTodate + "' ";
+            }
+            if (!strSearch.equals("")) {
+                where = "";
+                where += " and (doc_no like '%" + strSearch + "%' or cust_code like '%" + strSearch + "%' or user_request like '%" + strSearch + "%') ";
+            }
+
+            // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
+            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,user_request,remark,creator_code from ic_trans where doc_format_code = 'PRA' and trans_flag = 4 and last_status = 0 and doc_success = 0 " + where + " order by doc_date,doc_time desc desc limit 100";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            System.out.println(__strQUERY1);
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+
+            while (__rs1.next()) {
+                JSONObject obj = new JSONObject();
+
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("approve_code", __rs1.getString("user_request"));
+                obj.put("remark", __rs1.getString("remark"));
+
+                __jsonArr.put(obj);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", __jsonArr);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getPODocList")
+    public Response getPODocList(
+            @QueryParam("search") String strSearch,
+            @QueryParam("fromdate") String strFromDate,
+            @QueryParam("todate") String strTodate
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String where = "";
+
+            if (!strFromDate.equals("") && !strTodate.equals("")) {
+                where += " and doc_date between '" + strFromDate + "' and '" + strTodate + "' ";
+            }
+            if (!strSearch.equals("")) {
+                where = "";
+                where += " and (doc_no like '%" + strSearch + "%' or cust_code like '%" + strSearch + "%' or user_request like '%" + strSearch + "%') ";
+            }
+
+            // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
+            String __strQUERY1 = "select trans_type,trans_flag,doc_date,doc_time,doc_no,inquiry_type,vat_type,cust_code,vat_rate,user_request,doc_format_code,creator_code,remark,"
+                    + "  (\n"
+                    + "    SELECT ARRAY_TO_STRING(\n"
+                    + "      ARRAY(\n"
+                    + "        SELECT billing_no \n"
+                    + "        FROM ap_ar_trans_detail \n"
+                    + "        WHERE ap_ar_trans_detail.doc_no = ic_trans.doc_no\n"
+                    + "      ), ','\n"
+                    + "    )\n"
+                    + "  ) AS pra_doc_list from ic_trans where trans_flag=6 and last_status = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            System.out.println(__strQUERY1);
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+
+            while (__rs1.next()) {
+                JSONObject obj = new JSONObject();
+
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("user_request", __rs1.getString("user_request"));
+                obj.put("creator_code", __rs1.getString("creator_code"));
+                obj.put("pra_doc_list", __rs1.getString("pra_doc_list"));
+                obj.put("remark", __rs1.getString("remark"));
+
+                __jsonArr.put(obj);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", __jsonArr);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @POST
+    @Path("/updatePoDetail")
+    public Response updatePoDetail(
+            @QueryParam("docno") String strDocNo,
+            String data
+    ) throws Exception {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+
+        __objResponse.put("success", false);
+        try {
+            String _guid_code = "";
+            String _item_code = "";
+            String _item_name = "";
+            String _unit_code = "";
+            String _barcode = "";
+            String _qty = "";
+            String _price = "";
+            String _wh_code = "";
+            String _shelf_code = "";
+            String __cust_code = "";
+            String __creator_code = "";
+            String _stand_value = "";
+            String _divide_value = "";
+            String _ratio = "";
+            String _doc_no = "";
+            String _doc_date = "";
+            String _doc_time = "";
+            if (data != null) {
+
+                JSONArray objJSArr = new JSONArray(data);
+
+                StringBuilder __query_builder = new StringBuilder();
+                UUID uuid = UUID.randomUUID();
+                String strGUID = uuid.toString();
+
+                _routine __routine = new _routine();
+                Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+
+                String __deleteQuery = "delete from ic_trans_detail where doc_no = '" + strDocNo + "'";
+                System.out.println("__deleteQuery " + __deleteQuery.toString());
+
+                Statement __stmtdelete = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                __stmtdelete.executeUpdate(__deleteQuery.toString());
+                __stmtdelete.close();
+
+                for (int i = 0; i < objJSArr.length(); i++) {
+                    JSONObject objJSData = objJSArr.getJSONObject(i);
+                    _doc_no = objJSData.has("doc_no") ? objJSData.getString("doc_no") : "";
+                    _doc_date = objJSData.has("doc_date") ? objJSData.getString("doc_date") : "";
+                    _doc_time = objJSData.has("doc_time") ? objJSData.getString("doc_time") : "";
+                    __cust_code = objJSData.has("cust_code") ? objJSData.getString("cust_code") : "";
+                    __creator_code = objJSData.has("emp_code") ? objJSData.getString("emp_code") : "";
+                    _item_code = objJSData.has("item_code") ? objJSData.getString("item_code") : "";
+                    _item_name = objJSData.has("item_name") ? objJSData.getString("item_name") : "";
+                    _unit_code = objJSData.has("unit_code") ? objJSData.getString("unit_code") : "";
+                    _barcode = objJSData.has("barcode") ? objJSData.getString("barcode") : "";
+                    _qty = objJSData.has("qty") ? objJSData.getString("qty") : "1";
+                    _price = objJSData.has("price") ? objJSData.getString("price") : "0";
+                    _stand_value = objJSData.has("stand_value") ? objJSData.getString("stand_value") : "1";
+                    _divide_value = objJSData.has("divide_value") ? objJSData.getString("divide_value") : "1";
+                    _ratio = objJSData.has("ratio") ? objJSData.getString("ratio") : "1";
+
+                    __query_builder.append("insert into ic_trans_detail (trans_type, trans_flag,vat_type, " // smallint, smallint
+                            + "doc_date, doc_time, doc_no, " // date, varchar(5), varchar(25)
+                            + "cust_code,item_code,item_name,unit_code,barcode,qty,price,creator_code,create_datetime,stand_value,divide_value,ratio,line_number,calc_flag,sum_amount,doc_date_calc, doc_time_calc) values (1,6,1,'" + _doc_date + "','" + _doc_time + "','" + _doc_no + "','" + __cust_code + "','" + _item_code + "','" + _item_name + "','" + _unit_code + "','" + _barcode + "'"
+                            + ",'" + _qty + "','" + _price + "','" + __creator_code + "','now()','" + _stand_value + "','" + _divide_value + "','" + _ratio + "','" + i + "',1,'" + (Float.parseFloat(_qty) * Float.parseFloat(_price)) + "','" + _doc_date + "','" + _doc_time + "');");
+
+                }
+                Statement __stmt2;
+
+                System.out.println("__query_builder " + __query_builder);
+
+                __stmt2 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                __stmt2.executeUpdate(__query_builder.toString());
+                __objResponse.put("msg", "success");
+                __objResponse.put("success", true);
+                __stmt2.close();
+                __conn.close();
+
+            } else {
+                return Response.status(400).entity("{ERROR: Data is null}").build();
+            }
+
+        } catch (JSONException ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(__objResponse.toString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    @POST
+    @Path("/createPoDoc")
+    public Response createPoDoc(String data) throws Exception {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+
+        try {
+            if (data == null) {
+                return Response.status(400).entity("{ERROR: Data is null}").build();
+            }
+
+            JSONObject objJSData = new JSONObject(data);
+
+            String doc_no = objJSData.optString("doc_no", "");
+            String doc_time = objJSData.optString("doc_time", "");
+            String cust_code = objJSData.optString("cust_code", "");
+            String doc_date = objJSData.optString("doc_date", "");
+            String branch_code = objJSData.optString("branch_code", "");
+            String vat_rate = "7";
+            String creator_code = objJSData.optString("emp_code", "");
+            String remark = objJSData.optString("remark", "");
+            BigDecimal totalValue = getBigDecimal(objJSData, "total_value", BigDecimal.ZERO);
+            BigDecimal totalExceptVat = getBigDecimal(objJSData, "total_except_vat", BigDecimal.ZERO);
+            BigDecimal totalAfterVat = getBigDecimal(objJSData, "total_after_vat", BigDecimal.ZERO);
+            BigDecimal totalAmount = getBigDecimal(objJSData, "total_amount", BigDecimal.ZERO);
+
+            // คำนวณ total_before_vat, total_vat_value (ใช้ BigDecimal แทน Float เพื่อความแม่นยำ)
+            BigDecimal totalBeforeVat = totalAfterVat.multiply(new BigDecimal("100"))
+                    .divide(new BigDecimal("107"), 4, RoundingMode.HALF_UP);
+            BigDecimal totalVatValue = totalAfterVat.subtract(totalBeforeVat);
+
+            // BUG FIX #1: has("doc_detail") แต่ดึง "doc_list" → ใช้ key เดียวกัน
+            JSONArray objJSArrDoc = objJSData.has("doc_list") ? objJSData.getJSONArray("doc_list") : new JSONArray();
+            JSONArray objJSArrItems = objJSData.has("items") ? objJSData.getJSONArray("items") : new JSONArray();
+
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+            __conn.setAutoCommit(false);
+
+            try {
+                // --- 1) ap_ar_trans_detail INSERT ---
+                // BUG FIX #2: ลบ "1," ที่เกินออก (column 7 ค่า แต่ values เดิมมี 8 ค่า)
+                String sqlApAr = "INSERT INTO ap_ar_trans_detail "
+                        + "(trans_type, trans_flag, doc_date, doc_no, billing_no, billing_date, calc_flag) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+                // --- 2) ic_trans UPDATE ---
+                String sqlUpdateIcTrans = "UPDATE ic_trans SET doc_success = 1, used_status = 1 WHERE doc_no = ?";
+
+                PreparedStatement __stmtApAr = __conn.prepareStatement(sqlApAr);
+                PreparedStatement __stmtUpdateIcTrans = __conn.prepareStatement(sqlUpdateIcTrans);
+
+                for (int i = 0; i < objJSArrDoc.length(); i++) {
+                    JSONObject objJSDataDoc = objJSArrDoc.getJSONObject(i);
+                    String _doc_no = objJSDataDoc.optString("doc_no", "");
+                    String _doc_date = objJSDataDoc.optString("doc_date", "");
+
+                    // INSERT ap_ar_trans_detail
+                    __stmtApAr.setInt(1, 1);
+                    __stmtApAr.setInt(2, 6);
+                    __stmtApAr.setDate(3, toSqlDate(doc_date));
+                    __stmtApAr.setString(4, doc_no);
+                    __stmtApAr.setString(5, _doc_no);
+                    __stmtApAr.setDate(6, toSqlDate(_doc_date));
+                    __stmtApAr.setInt(7, 1);
+                    __stmtApAr.addBatch();
+
+                    // UPDATE ic_trans
+                    __stmtUpdateIcTrans.setString(1, _doc_no);
+                    __stmtUpdateIcTrans.addBatch();
+                }
+
+                __stmtApAr.executeBatch();
+                __stmtApAr.close();
+                __stmtUpdateIcTrans.executeBatch();
+                __stmtUpdateIcTrans.close();
+
+                // --- 3) ic_trans_detail INSERT ---
+                // BUG FIX #3: ลบ "1," ที่เกินออกหลัง trans_flag (values เดิมมีค่าเกิน 1 ค่า)
+                String sqlDetail = "INSERT INTO ic_trans_detail "
+                        + "(trans_type, trans_flag, doc_date, doc_time, doc_no, cust_code, inquiry_type, "
+                        + " item_code, item_name, unit_code, qty, price, sum_amount, line_number, "
+                        + " stand_value, divide_value, ratio, calc_flag, doc_date_calc, doc_time_calc, creator_code) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                PreparedStatement __stmtItems = __conn.prepareStatement(sqlDetail);
+                for (int i = 0; i < objJSArrItems.length(); i++) {
+                    JSONObject item = objJSArrItems.getJSONObject(i);
+                    __stmtItems.setInt(1, 1);
+                    __stmtItems.setInt(2, 6);
+                    __stmtItems.setDate(3, toSqlDate(doc_date));
+                    __stmtItems.setString(4, doc_time);
+                    __stmtItems.setString(5, doc_no);
+                    __stmtItems.setString(6, cust_code);
+                    __stmtItems.setInt(7, 0);
+                    __stmtItems.setString(8, item.getString("item_code"));
+                    __stmtItems.setString(9, item.getString("item_name"));
+                    __stmtItems.setString(10, item.getString("unit_code"));
+                    __stmtItems.setBigDecimal(11, toDecimal(item.getString("qty")));          // ✅ numeric
+                    __stmtItems.setBigDecimal(12, toDecimal(item.getString("price")));        // ✅ numeric
+                    __stmtItems.setBigDecimal(13, toDecimal(item.getString("sum_amount")));   // ✅ numeric
+                    __stmtItems.setInt(14, i);
+                    __stmtItems.setBigDecimal(15, toDecimal(item.getString("stand_value"))); // ✅ numeric
+                    __stmtItems.setBigDecimal(16, toDecimal(item.getString("divide_value")));// ✅ numeric
+                    __stmtItems.setBigDecimal(17, toDecimal(item.getString("ratio")));
+                    __stmtItems.setInt(18, 1);
+                    __stmtItems.setDate(19, toSqlDate(doc_date));
+                    __stmtItems.setString(20, doc_time);
+                    __stmtItems.setString(21, creator_code);
+                    __stmtItems.addBatch();
+                }
+                __stmtItems.executeBatch();
+                __stmtItems.close();
+
+                // --- 4) ic_trans INSERT ---
+                // BUG FIX #4: เพิ่ม VALUES ที่หายไป
+                String sqlPoTrans = "INSERT INTO ic_trans "
+                        + "(trans_type, trans_flag, doc_date, doc_time, doc_no, inquiry_type, vat_type, "
+                        + " cust_code, vat_rate, user_request, doc_format_code, creator_code, remark, branch_code,total_value, total_before_vat, total_vat_value, " // numeric x3
+                        + "total_after_vat, total_except_vat, " // numeric x2
+                        + "total_amount, balance_amount) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?)";
+
+                PreparedStatement __stmtPoTrans = __conn.prepareStatement(sqlPoTrans);
+                __stmtPoTrans.setInt(1, 1);
+                __stmtPoTrans.setInt(2, 6);
+                __stmtPoTrans.setDate(3, toSqlDate(doc_date));
+                __stmtPoTrans.setString(4, doc_time);
+                __stmtPoTrans.setString(5, doc_no);
+                __stmtPoTrans.setInt(6, 0);
+                __stmtPoTrans.setInt(7, 1);
+                __stmtPoTrans.setString(8, cust_code);
+                __stmtPoTrans.setBigDecimal(9, toDecimal(vat_rate));
+                __stmtPoTrans.setString(10, creator_code);
+                __stmtPoTrans.setString(11, "PO");
+                __stmtPoTrans.setString(12, creator_code);
+                __stmtPoTrans.setString(13, remark);
+                __stmtPoTrans.setString(14, branch_code);
+                __stmtPoTrans.setBigDecimal(15, totalValue);         // total_value       numeric
+                __stmtPoTrans.setBigDecimal(16, totalBeforeVat);     // total_before_vat  numeric
+                __stmtPoTrans.setBigDecimal(17, totalVatValue);      // total_vat_value   numeric
+                __stmtPoTrans.setBigDecimal(18, totalAfterVat);      // total_after_vat   numeric
+                __stmtPoTrans.setBigDecimal(19, totalExceptVat);     // total_except_vat  numeric
+                __stmtPoTrans.setBigDecimal(20, totalAmount);        // total_amount      numeric
+                __stmtPoTrans.setBigDecimal(21, totalAmount);        // balance_amount    numeric (= total_amount)
+                __stmtPoTrans.executeUpdate();
+                __stmtPoTrans.close();
+
+                __conn.commit();
+                __objResponse.put("msg", "success");
+                __objResponse.put("success", true);
+
+            } catch (Exception ex) {
+                __conn.rollback();
+                throw ex;
+            } finally {
+                __conn.close();
+            }
+
+        } catch (JSONException ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+
+        return Response.ok(__objResponse.toString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    // helper method แปลง String → BigDecimal
+    private java.math.BigDecimal toDecimal(String val) {
+        try {
+            return new java.math.BigDecimal(val);
+        } catch (Exception e) {
+            return java.math.BigDecimal.ZERO;
+        }
+    }
+
+    private java.sql.Date toSqlDate(String dateStr) {
+        try {
+            return java.sql.Date.valueOf(dateStr); // รับ format "yyyy-MM-dd"
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GET
+    @Path("/getPRDocList")
+    public Response getPRDocList(
+            @QueryParam("search") String strSearch,
+            @QueryParam("fromdate") String strFromDate,
+            @QueryParam("todate") String strTodate
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String where = "";
+
+            if (!strFromDate.equals("") && !strTodate.equals("")) {
+                where += " and doc_date between '" + strFromDate + "' and '" + strTodate + "' ";
+            }
+            if (!strSearch.equals("")) {
+                where = "";
+                where += " and (doc_no like '%" + strSearch + "%' or cust_code like '%" + strSearch + "%' or user_request like '%" + strSearch + "%') ";
+            }
+
+            // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
+            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,user_request,approve_status,remark,creator_code,approve_code,coalesce((select doc_no from ic_trans icx where icx.doc_ref = ic.doc_no and icx.trans_flag=4),'') as doc_ref,coalesce((select create_datetime from ic_trans icx where icx.doc_ref = ic.doc_no and icx.trans_flag=4),now()) as approve_datetime from ic_trans ic where doc_format_code = 'PR' and last_status = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            System.out.println(__strQUERY1);
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+
+            while (__rs1.next()) {
+                JSONObject obj = new JSONObject();
+
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("user_request", __rs1.getString("user_request"));
+                obj.put("approve_status", __rs1.getString("approve_status"));
+                obj.put("approve_code", __rs1.getString("approve_code"));
+                obj.put("doc_ref", __rs1.getString("doc_ref"));
+                obj.put("approve_datetime", __rs1.getString("approve_datetime"));
+                obj.put("remark", __rs1.getString("remark"));
+
+                __jsonArr.put(obj);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", __jsonArr);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
     @Path("/getTotalBalance")
     public Response getTotalBalance(
             @QueryParam("cust_code") String strCust
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2001,21 +2742,104 @@ public class PurchaseOnlineService {
         return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
     }
 
-    @GET
-    @Path("/getDocDetail")
-    public Response getDocDetail(
-            @QueryParam("cust_code") String strCust,
-            @QueryParam("doc_no") String strDocNo
+    @POST
+    @Path("/getPRADetail")
+    public Response getPRADetail(
+            String data
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
             _routine __routine = new _routine();
             Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
 
-            String __strQUERY1 = "select *,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and doc_no = '" + strDocNo + "' ";
+            JSONArray __jsonArr = new JSONArray();
+            JSONObject obj = new JSONObject();
+            if (data != null) {
+
+                JSONArray objJSArr = new JSONArray(data);
+
+                String docnos = "";
+                for (int i = 0; i < objJSArr.length(); i++) {
+                    JSONObject objJSData = objJSArr.getJSONObject(i);
+                    if (i != 0) {
+                        docnos += ",'" + objJSData.getString("doc_no") + "'";
+                    } else {
+                        docnos += "'" + objJSData.getString("doc_no") + "'";
+                    }
+                }
+
+                String __strQUERYCount = "SELECT \n"
+                        + "  item_code,\n"
+                        + "  item_name,\n"
+                        + "  unit_code,\n"
+                        + "  SUM(qty) AS sum_qty,\n"
+                        + "  MAX(price) AS max_price,\n"
+                        + "  SUM(qty) *   MAX(price) as sum_amount,\n"
+                        + "  wh_code,\n"
+                        + "  shelf_code,\n"
+                        + "  stand_value,\n"
+                        + "  divide_value,\n"
+                        + "  ratio,\n"
+                        + "  COALESCE((SELECT maximum_qty FROM ic_inventory_detail WHERE ic_code = item_code), 0) AS maximum_qty,\n"
+                        + "  COALESCE((SELECT minimum_qty FROM ic_inventory_detail WHERE ic_code = item_code), 0) AS minimum_qty\n"
+                        + "FROM ic_trans_detail \n"
+                        + "WHERE doc_no IN (" + docnos + ")\n"
+                        + "GROUP BY item_code, item_name, unit_code, wh_code, shelf_code, stand_value, divide_value, ratio;";
+                System.out.println("__strQUERYCount" + __strQUERYCount);
+                Statement __stmtTotal = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet _rsTotal = __stmtTotal.executeQuery(__strQUERYCount);
+                JSONArray _jsonArrx = new JSONArray();
+                while (_rsTotal.next()) {
+
+                    JSONObject objx = new JSONObject();
+                    objx.put("item_code", _rsTotal.getString("item_code"));
+                    objx.put("item_name", _rsTotal.getString("item_name"));
+                    objx.put("unit_code", _rsTotal.getString("unit_code"));
+                    objx.put("minimum_qty", _rsTotal.getString("minimum_qty"));
+                    objx.put("maximum_qty", _rsTotal.getString("maximum_qty"));
+                    objx.put("qty", _rsTotal.getString("sum_qty"));
+                    objx.put("stand_value", _rsTotal.getString("stand_value"));
+                    objx.put("divide_value", _rsTotal.getString("divide_value"));
+                    objx.put("ratio", _rsTotal.getString("ratio"));
+                    objx.put("price", _rsTotal.getString("max_price"));
+                    objx.put("sum_amount", _rsTotal.getString("sum_amount"));
+                    _jsonArrx.put(objx);
+
+                }
+                _rsTotal.close();
+                __stmtTotal.close();
+                obj.put("items", _jsonArrx);
+
+                __conn.close();
+                __objResponse.put("data", obj);
+
+                __objResponse.put("success", true);
+            } else {
+                return Response.status(400).entity("{ERROR: datanull}").build();
+            }
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getDocDetail")
+    public Response getDocDetail(
+            @QueryParam("doc_no") String strDocNo
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "select *,creator_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(creator_code) limit 1),'') as emp_name from ic_trans where  doc_no = '" + strDocNo + "' ";
             Statement __stmt1;
             ResultSet __rs1;
 
@@ -2026,7 +2850,7 @@ public class PurchaseOnlineService {
             JSONObject obj = new JSONObject();
             while (__rs1.next()) {
 
-                obj.put("remark_5", __rs1.getString("remark_5"));
+                obj.put("remark", __rs1.getString("remark"));
                 obj.put("doc_no", __rs1.getString("doc_no"));
                 obj.put("doc_date", __rs1.getString("doc_date"));
                 obj.put("doc_time", __rs1.getString("doc_time"));
@@ -2037,7 +2861,7 @@ public class PurchaseOnlineService {
                 obj.put("emp_name", __rs1.getString("emp_name"));
                 obj.put("items", new JSONArray());
 
-                String __strQUERYCount = "select qty,item_code,item_name,qty,unit_code,price,wh_code,shelf_code,stand_value,divide_value,ratio,sum_amount from ic_trans_detail where doc_no = '" + __rs1.getString("doc_no") + "'";
+                String __strQUERYCount = "select qty,item_code,item_name,qty,unit_code,price,wh_code,shelf_code,stand_value,divide_value,ratio,sum_amount,coalesce((select maximum_qty from ic_inventory_detail where ic_code = item_code ),0) as maximum_qty,coalesce((select minimum_qty from ic_inventory_detail where ic_code = item_code ),0) as minimum_qty  from ic_trans_detail where doc_no = '" + __rs1.getString("doc_no") + "'";
                 Statement __stmtTotal = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 ResultSet _rsTotal = __stmtTotal.executeQuery(__strQUERYCount);
                 JSONArray _jsonArrx = new JSONArray();
@@ -2047,6 +2871,8 @@ public class PurchaseOnlineService {
                     objx.put("item_code", _rsTotal.getString("item_code"));
                     objx.put("item_name", _rsTotal.getString("item_name"));
                     objx.put("unit_code", _rsTotal.getString("unit_code"));
+                    objx.put("minimum_qty", _rsTotal.getString("minimum_qty"));
+                    objx.put("maximum_qty", _rsTotal.getString("maximum_qty"));
                     objx.put("wh_code", _rsTotal.getString("wh_code"));
                     objx.put("shelf_code", _rsTotal.getString("shelf_code"));
                     objx.put("stand_value", _rsTotal.getString("stand_value"));
@@ -2094,8 +2920,8 @@ public class PurchaseOnlineService {
             @QueryParam("model") String strModel,
             @QueryParam("limit") String strLimit
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2188,18 +3014,18 @@ public class PurchaseOnlineService {
                     + " from ic_inventory b "
                     + " left join ic_inventory_detail c on b.code=c.ic_code "
                     + " left join ar_item_by_customer arc on arc.ic_code = b.code and arc.ar_code='" + strCustCode + "' "
-                    + " where b.item_pattern='[W]' " + _whereFinal + " ";
+                    + " where b.supplier_code like '%" + strCustCode + "%' " + _whereFinal + " ";
 
             String __strQUERYCount
                     = "select count(b.code) as xcount "
                     + " from ic_inventory b "
                     + " left join ic_inventory_detail c on b.code=c.ic_code "
                     + " left join ar_item_by_customer arc on arc.ic_code = b.code and arc.ar_code='" + strCustCode + "' "
-                    + " where b.item_pattern='[W]' " + _whereFinal + " ";
+                    + " where b.supplier_code like '%" + strCustCode + "%' " + _whereFinal + " ";
 
             Statement __stmt1;
             ResultSet __rs1;
-           // System.out.println(__strQUERY1);
+            // System.out.println(__strQUERY1);
             __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             __rs1 = __stmt1.executeQuery(__strQUERY1 + " offset " + strOffset + " limit " + strLimit);
 
@@ -2249,8 +3075,8 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType,
             @QueryParam("wh_code") String strWhCode
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2260,10 +3086,8 @@ public class PurchaseOnlineService {
             String strVatRate = "7";
 
             String __strQUERY1 = ""
-                    + " select a.ic_code,b.name_1 as item_name,a.code as unit_code,\n"
+                    + " select a.ic_code,b.name_1 as item_name,a.code as unit_code,c.maximum_qty,c.minimum_qty, coalesce((select price from ic_trans_detail where ic_trans_detail.item_code=b.code and ic_trans_detail.cust_code=b.supplier_code and ic_trans_detail.unit_code=a.code and trans_flag = 12 order by doc_date desc limit 1),0) as price,"
                     + " "
-                    + " coalesce(((select sum(qty) from ic_trans_detail e where a.ic_code=e.item_code and a.code=e.unit_code and e.doc_date between '2025-01-01' and 'NOW()' limit 1)\n"
-                    + " *(select stand_value from ic_trans_detail e where a.ic_code=e.item_code and a.code=e.unit_code limit 1)),0) as sum_sale,\n"
                     + " coalesce((select status from ar_item_by_customer where ic_code=b.code and ar_code='" + strCustCode + "' limit 1),0) as favorite_item,0 as price,\n"
                     + " c.start_sale_wh,c.start_sale_shelf,a.stand_value,a.divide_value,a.ratio\n"
                     + " from ic_unit_use a\n"
@@ -2286,16 +3110,18 @@ public class PurchaseOnlineService {
                 obj.put("item_code", __rs1.getString("ic_code"));
                 obj.put("item_name", __rs1.getString("item_name"));
                 obj.put("unit_code", __rs1.getString("unit_code"));
+                obj.put("maximum_qty", __rs1.getString("maximum_qty"));
+                obj.put("minimum_qty", __rs1.getString("minimum_qty"));
                 obj.put("balance_qty", "0");
                 obj.put("sold_out", "0");
-                obj.put("sum_sale", __rs1.getString("sum_sale"));
+                obj.put("sum_sale", "0");
                 obj.put("wh_code", __rs1.getString("start_sale_wh"));
                 obj.put("shelf_code", __rs1.getString("start_sale_shelf"));
                 obj.put("stand_value", __rs1.getString("stand_value"));
                 obj.put("divide_value", __rs1.getString("divide_value"));
                 obj.put("ratio", __rs1.getString("ratio"));
                 obj.put("favorite_item", __rs1.getString("favorite_item"));
-                obj.put("price", 0);
+                obj.put("price", __rs1.getString("price"));
 //                String year = "0";
 //                if (!strShelfCode.equals("")) {
 //                    year = strShelfCode;
@@ -2360,8 +3186,8 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType,
             @QueryParam("cust_code") String strCustCode
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2422,46 +3248,6 @@ public class PurchaseOnlineService {
                 obj.put("balance_qty", __rs1.getString("balance_qty"));
                 String location = __rs1.getString("location");
                 String year = "0";
-                if (location != null && location.trim().matches("\\d{4}")) {
-                    year = location.substring(0, 2);
-                    String __strQUERYPrice = "SELECT "
-                            + "  ic_code,unit_code, "
-                            + "  CASE (RIGHT(EXTRACT(YEAR FROM NOW())::int::text, 2)::int - '" + year + "'::int) "
-                            + "    WHEN 0 THEN '0' "
-                            + "    WHEN 1 THEN coalesce(price_1,'0')  "
-                            + "    WHEN 2 THEN coalesce(price_2,'0') "
-                            + "    WHEN 3 THEN coalesce(price_3,'0') "
-                            + "    WHEN 4 THEN coalesce(price_4,'0') "
-                            + "    ELSE '0' "
-                            + "  END AS price "
-                            + "FROM ic_inventory_price_formula  "
-                            + "WHERE ic_code = '" + __rs1.getString("ic_code") + "'  and sale_type in (0," + strSaleType + ");";
-
-                    Statement __stmtPrice = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                    ResultSet __rsPrice = __stmtPrice.executeQuery(__strQUERYPrice);
-                    System.out.println("__strQUERYPrice " + __strQUERYPrice);
-                    while (__rsPrice.next()) {
-                        obj.put("price", __rsPrice.getString("price"));
-                    }
-
-                    __rsPrice.close();
-                    __stmtPrice.close();
-                }
-
-                if (obj.get("price").toString().equals("0")) {
-
-                    JSONObject prices = getProductPriceLocal(__rs1.getString("ic_code"), __rs1.getString("unit_code"), "1", strCustCode, strSaleType);
-                    System.out.println("__rs1.getString " + __rs1.getString("ic_code") + " unit " + __rs1.getString("unit_code") + "cust " + strCustCode + " saletype = " + strSaleType);
-                    System.out.println(prices.toString());
-                    JSONArray pricesArr = prices.optJSONArray("data");
-                    if (pricesArr != null && pricesArr.length() > 0) {
-                        JSONObject priceObj = pricesArr.optJSONObject(0);
-                        obj.put("price", priceObj != null ? priceObj.optString("price", "0") : "0");
-                    } else {
-                        obj.put("price", "0");
-                    }
-
-                }
 
                 __jsonArr.put(obj);
 
@@ -2486,8 +3272,8 @@ public class PurchaseOnlineService {
             @QueryParam("wh_code") String strWarehouse,
             @QueryParam("shelf_code") String strShelfCode
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2557,8 +3343,8 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType,
             @QueryParam("cust_code") String strCustCode
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2680,8 +3466,8 @@ public class PurchaseOnlineService {
             @QueryParam("wh_code") String strWhCode,
             @QueryParam("sale_type") String strSaleType
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2783,8 +3569,8 @@ public class PurchaseOnlineService {
     @GET
     @Path("/getCategoryList")
     public Response getCategoryList() {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2823,8 +3609,8 @@ public class PurchaseOnlineService {
     @GET
     @Path("/getWarehouseList")
     public Response getWarehouseList() {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2863,8 +3649,8 @@ public class PurchaseOnlineService {
     @GET
     @Path("/deleteItem")
     public Response deleteItem(@QueryParam("guid_code") String strGuidCode, @QueryParam("cust_code") String strCustCode) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2872,7 +3658,7 @@ public class PurchaseOnlineService {
             Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
             String where = "";
 
-            String __strQUERY1 = "delete from ws_cart_order_temp where guid_code = '" + strGuidCode + "' and cust_code = '" + strCustCode + "' ";
+            String __strQUERY1 = "delete from ps_cart_order_temp where guid_code = '" + strGuidCode + "' and cust_code = '" + strCustCode + "' ";
 
             System.out.println("" + __strQUERY1);
             Statement __stmtz;
@@ -2891,8 +3677,8 @@ public class PurchaseOnlineService {
     @GET
     @Path("/deleteAllItems")
     public Response deleteAllItems(@QueryParam("cust_code") String strCustCode) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2900,7 +3686,7 @@ public class PurchaseOnlineService {
             Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
             String where = "";
 
-            String __strQUERY1 = "delete from ws_cart_order_temp where cust_code = '" + strCustCode + "'";
+            String __strQUERY1 = "delete from ps_cart_order_temp where cust_code = '" + strCustCode + "'";
 
             System.out.println("" + __strQUERY1);
             Statement __stmtz;
@@ -2919,8 +3705,8 @@ public class PurchaseOnlineService {
     @GET
     @Path("/getCustomerList")
     public Response getCustomerList(@QueryParam("search") String strCustCode) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2963,10 +3749,54 @@ public class PurchaseOnlineService {
     }
 
     @GET
+    @Path("/getSupplierList")
+    public Response getSupplierList(@QueryParam("search") String strCustCode) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String where = "";
+            if (!strCustCode.equals("")) {
+                where += " and ( code like '%" + strCustCode + "%'  or name_1 like '%" + strCustCode + "%') ";
+            }
+            String __strQUERY1 = "SELECT code as user_code,name_1 as user_name FROM ap_supplier where 1=1 " + where + " limit 50";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rs1.next()) {
+
+                JSONObject obj = new JSONObject();
+                obj.put("code", __rs1.getString("user_code"));
+                obj.put("name", __rs1.getString("user_name"));
+
+                __jsonArr.put(obj);
+
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("success", true);
+            __objResponse.put("data", __jsonArr);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
     @Path("/getEmployeeList")
     public Response getEmployeeList(@QueryParam("search") String strCustCode) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3011,8 +3841,8 @@ public class PurchaseOnlineService {
     public Response getCustomerCRM(@QueryParam("search") String strCustCode,
             @QueryParam("limit") @DefaultValue("50") int limit,
             @QueryParam("offset") @DefaultValue("0") int offset) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2_67";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3088,8 +3918,8 @@ public class PurchaseOnlineService {
     public Response getEmployeeCRM(@QueryParam("search") String strCustCode,
             @QueryParam("limit") @DefaultValue("50") int limit,
             @QueryParam("offset") @DefaultValue("0") int offset) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2_67";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3131,8 +3961,8 @@ public class PurchaseOnlineService {
     @GET
     @Path("/getCompanyProfile")
     public Response getCompanyProfile() {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3173,8 +4003,8 @@ public class PurchaseOnlineService {
     @GET
     @Path("/getImageList")
     public Response getImageList(@QueryParam("item_code") String strItemCode) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2_images";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1_images";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3216,8 +4046,8 @@ public class PurchaseOnlineService {
     @Produces("image/png")
     public Response imagesguid(
             @QueryParam("guid_code") String strItemCode) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2_images";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1_images";
         String query = "select image_file from images  where guid_code = '" + strItemCode + "'";
 
         byte[] __value = new byte[1024];
@@ -3252,8 +4082,8 @@ public class PurchaseOnlineService {
             @QueryParam("item_code") String itemCode,
             @Context Request request
     ) {
-        String strProvider = "DATA";
-        String strDatabaseName = "data2_images";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1_images";
 
         if (itemCode == null || itemCode.trim().isEmpty()) {
             return Response.status(400)
@@ -3344,8 +4174,8 @@ public class PurchaseOnlineService {
             String strCustomerCode,
             String strSaleType) {
 
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         String strVatType = "ภาษีรวมใน";
 
         String strVatRate = "7";
@@ -3876,8 +4706,8 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustomerCode,
             @QueryParam("vat_rate") String strVatRate) {
 
-        String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
         String strVatType = "ภาษีรวมใน";
         String strSaleType = "0";
         JSONObject __objResponse = new JSONObject();
