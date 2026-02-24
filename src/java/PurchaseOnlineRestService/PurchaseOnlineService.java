@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.CacheControl;
@@ -2174,7 +2176,7 @@ public class PurchaseOnlineService {
             }
 
             // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
-            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,user_request,approve_status,remark,creator_code from ic_trans where doc_format_code = 'PR' and last_status = 0 and approve_status = 0 and doc_success = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,coalesce((select name_1 from ap_supplier ap where ap.code = cust_code),'') as cust_name,user_request,approve_status,remark,creator_code from ic_trans where doc_format_code = 'PR' and last_status = 0 and approve_status = 0 and doc_success = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
 
             Statement __stmt1;
             ResultSet __rs1;
@@ -2191,6 +2193,7 @@ public class PurchaseOnlineService {
                 obj.put("doc_date", __rs1.getString("doc_date"));
                 obj.put("doc_time", __rs1.getString("doc_time"));
                 obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("cust_name", __rs1.getString("cust_name"));
                 obj.put("user_request", __rs1.getString("user_request"));
                 obj.put("remark", __rs1.getString("remark"));
 
@@ -2234,7 +2237,7 @@ public class PurchaseOnlineService {
             }
 
             // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
-            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,user_request,remark,creator_code from ic_trans where doc_format_code = 'PRA' and trans_flag = 4 and last_status = 0 and doc_success = 0 " + where + " order by doc_date,doc_time desc desc limit 100";
+            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,coalesce((select name_1 from ap_supplier ap where ap.code = cust_code),'') as cust_name,user_request,approve_code,remark,creator_code from ic_trans where doc_format_code = 'PRA' and trans_flag = 4 and last_status = 0 and doc_success = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
 
             Statement __stmt1;
             ResultSet __rs1;
@@ -2251,7 +2254,8 @@ public class PurchaseOnlineService {
                 obj.put("doc_date", __rs1.getString("doc_date"));
                 obj.put("doc_time", __rs1.getString("doc_time"));
                 obj.put("cust_code", __rs1.getString("cust_code"));
-                obj.put("approve_code", __rs1.getString("user_request"));
+                obj.put("cust_name", __rs1.getString("cust_name"));
+                obj.put("approve_code", __rs1.getString("creator_code"));
                 obj.put("remark", __rs1.getString("remark"));
 
                 __jsonArr.put(obj);
@@ -2294,7 +2298,7 @@ public class PurchaseOnlineService {
             }
 
             // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
-            String __strQUERY1 = "select trans_type,trans_flag,doc_date,doc_time,doc_no,inquiry_type,vat_type,cust_code,vat_rate,user_request,doc_format_code,creator_code,remark,"
+            String __strQUERY1 = "select trans_type,trans_flag,doc_date,doc_time,doc_no,doc_success,inquiry_type,vat_type,cust_code,coalesce((select name_1 from ap_supplier ap where ap.code = cust_code),'') as cust_name,vat_rate,user_request,doc_format_code,creator_code,remark,"
                     + "  (\n"
                     + "    SELECT ARRAY_TO_STRING(\n"
                     + "      ARRAY(\n"
@@ -2303,7 +2307,8 @@ public class PurchaseOnlineService {
                     + "        WHERE ap_ar_trans_detail.doc_no = ic_trans.doc_no\n"
                     + "      ), ','\n"
                     + "    )\n"
-                    + "  ) AS pra_doc_list from ic_trans where trans_flag=6 and last_status = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+                    + "  ) AS pra_doc_list"
+                    + " from ic_trans where trans_flag=6 and last_status = 0 and doc_success = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
 
             Statement __stmt1;
             ResultSet __rs1;
@@ -2320,9 +2325,371 @@ public class PurchaseOnlineService {
                 obj.put("doc_date", __rs1.getString("doc_date"));
                 obj.put("doc_time", __rs1.getString("doc_time"));
                 obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("cust_name", __rs1.getString("cust_name"));
                 obj.put("user_request", __rs1.getString("user_request"));
                 obj.put("creator_code", __rs1.getString("creator_code"));
                 obj.put("pra_doc_list", __rs1.getString("pra_doc_list"));
+                obj.put("doc_success", __rs1.getString("doc_success"));
+                obj.put("remark", __rs1.getString("remark"));
+
+                __jsonArr.put(obj);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", __jsonArr);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getPODocWait")
+    public Response getPODocWait(
+            @QueryParam("search") String strSearch,
+            @QueryParam("fromdate") String strFromDate,
+            @QueryParam("todate") String strTodate
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String where = "";
+
+            if (!strFromDate.equals("") && !strTodate.equals("")) {
+                where += " and doc_date between '" + strFromDate + "' and '" + strTodate + "' ";
+            }
+            if (!strSearch.equals("")) {
+                where = "";
+                where += " and (doc_no like '%" + strSearch + "%' or cust_code like '%" + strSearch + "%' or user_request like '%" + strSearch + "%') ";
+            }
+
+            // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
+            String __strQUERY1 = "select trans_type,trans_flag,doc_date,doc_time,doc_no,inquiry_type,vat_type,cust_code,coalesce((select name_1 from ap_supplier ap where ap.code = cust_code),'') as cust_name,vat_rate,user_request,doc_format_code,creator_code,remark,"
+                    + "  (\n"
+                    + "    SELECT ARRAY_TO_STRING(\n"
+                    + "      ARRAY(\n"
+                    + "        SELECT billing_no \n"
+                    + "        FROM ap_ar_trans_detail \n"
+                    + "        WHERE ap_ar_trans_detail.doc_no = ic_trans.doc_no\n"
+                    + "      ), ','\n"
+                    + "    )\n"
+                    + "  ) AS pra_doc_list from ic_trans where trans_flag=6 and last_status = 0 and doc_success = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            System.out.println(__strQUERY1);
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+
+            while (__rs1.next()) {
+                JSONObject obj = new JSONObject();
+
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("cust_name", __rs1.getString("cust_name"));
+                obj.put("user_request", __rs1.getString("user_request"));
+                obj.put("creator_code", __rs1.getString("creator_code"));
+                obj.put("remark", __rs1.getString("remark"));
+
+                __jsonArr.put(obj);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", __jsonArr);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @POST
+    @Path("/createPUDoc")
+    public Response createPUDoc(String data) throws Exception {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+
+        try {
+            if (data == null) {
+                return Response.status(400).entity("{ERROR: Data is null}").build();
+            }
+
+            JSONObject objJSData = new JSONObject(data);
+
+            String doc_no = objJSData.optString("doc_no", "");
+
+            String doc_time = objJSData.optString("doc_time", "");
+            String cust_code = objJSData.optString("cust_code", "");
+            String doc_date = objJSData.optString("doc_date", "");
+            String branch_code = objJSData.optString("branch_code", "");
+            String vat_rate = objJSData.optString("vat_rate", "0");
+            String creator_code = objJSData.optString("emp_code", "");
+            String remark = objJSData.optString("remark", "");
+            String ap_cust_code = objJSData.optString("ap_cust_code", "");
+            String ap_cust_name = objJSData.optString("ap_cust_name", "");
+            String ap_branch_code = objJSData.optString("ap_branch_code", "");
+            String ap_branch_type = objJSData.optString("ap_branch_type", "");
+            String ap_tax_id = objJSData.optString("ap_tax_id", "");
+            BigDecimal totalValue = getBigDecimal(objJSData, "total_value", BigDecimal.ZERO);
+            BigDecimal totalBeforeVat = getBigDecimal(objJSData, "total_before_vat", BigDecimal.ZERO);
+            BigDecimal totalExceptVat = getBigDecimal(objJSData, "total_except_vat", BigDecimal.ZERO);
+            BigDecimal totalAfterVat = getBigDecimal(objJSData, "total_after_vat", BigDecimal.ZERO);
+            BigDecimal totalVatValue = getBigDecimal(objJSData, "total_vat_value", BigDecimal.ZERO);
+            BigDecimal totalAmount = getBigDecimal(objJSData, "total_amount", BigDecimal.ZERO);
+            BigDecimal totalDiscount = getBigDecimal(objJSData, "total_discount", BigDecimal.ZERO);
+            String sale_type = objJSData.optString("sale_type", "0");
+            String tax_type = objJSData.optString("tax_type", "0");
+
+            // BUG FIX #1: has("doc_detail") แต่ดึง "doc_list" → ใช้ key เดียวกัน
+            JSONArray objJSArrDoc = objJSData.has("doc_list") ? objJSData.getJSONArray("doc_list") : new JSONArray();
+            JSONArray objJSArrItems = objJSData.has("items") ? objJSData.getJSONArray("items") : new JSONArray();
+
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+            __conn.setAutoCommit(false);
+
+            try {
+                // --- 1) ap_ar_trans_detail INSERT ---
+                // BUG FIX #2: ลบ "1," ที่เกินออก (column 7 ค่า แต่ values เดิมมี 8 ค่า)
+                String sqlApAr = "INSERT INTO ap_ar_trans_detail "
+                        + "(trans_type, trans_flag, doc_date, doc_no, billing_no, billing_date, calc_flag) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?);";
+
+                // --- 2) ic_trans UPDATE ---
+                String sqlUpdateIcTrans = "UPDATE ic_trans SET doc_success = ?, used_status = 1 WHERE doc_no = ?";
+
+                PreparedStatement __stmtApAr = __conn.prepareStatement(sqlApAr);
+                PreparedStatement __stmtUpdateIcTrans = __conn.prepareStatement(sqlUpdateIcTrans);
+
+                for (int i = 0; i < objJSArrDoc.length(); i++) {
+                    JSONObject objJSDataDoc = objJSArrDoc.getJSONObject(i);
+                    String _doc_no = objJSDataDoc.optString("doc_no", "");
+                    String _doc_date = objJSDataDoc.optString("doc_date", "");
+                    String _doc_success = objJSDataDoc.optString("doc_success", "0");
+                    // INSERT ap_ar_trans_detail
+                    __stmtApAr.setInt(1, 1);
+                    __stmtApAr.setInt(2, 12);
+                    __stmtApAr.setDate(3, toSqlDate(doc_date));
+                    __stmtApAr.setString(4, doc_no);
+                    __stmtApAr.setString(5, _doc_no);
+                    __stmtApAr.setDate(6, toSqlDate(_doc_date));
+                    __stmtApAr.setInt(7, 1);
+                    __stmtApAr.addBatch();
+
+                    // UPDATE ic_trans
+                    __stmtUpdateIcTrans.setInt(1, Integer.parseInt(_doc_success));
+                    __stmtUpdateIcTrans.setString(2, _doc_no);
+                    __stmtUpdateIcTrans.addBatch();
+                }
+
+                __stmtApAr.executeBatch();
+                __stmtApAr.close();
+                __stmtUpdateIcTrans.executeBatch();
+                __stmtUpdateIcTrans.close();
+
+                // --- 3) ic_trans_detail INSERT ---
+                // BUG FIX #3: ลบ "1," ที่เกินออกหลัง trans_flag (values เดิมมีค่าเกิน 1 ค่า)
+                String sqlDetail = "INSERT INTO ic_trans_detail "
+                        + "(trans_type, trans_flag, doc_date, doc_time, doc_no, cust_code, inquiry_type, "
+                        + " item_code, item_name, unit_code, qty, price, sum_amount, line_number, "
+                        + " stand_value, divide_value, ratio, calc_flag, doc_date_calc, doc_time_calc, creator_code,sum_of_cost,ref_doc_no,ref_row,wh_code,shelf_code,vat_type,average_cost,tax_type) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?);";
+
+                PreparedStatement __stmtItems = __conn.prepareStatement(sqlDetail);
+                for (int i = 0; i < objJSArrItems.length(); i++) {
+                    JSONObject item = objJSArrItems.getJSONObject(i);
+                    __stmtItems.setInt(1, 1);
+                    __stmtItems.setInt(2, 12);
+                    __stmtItems.setDate(3, toSqlDate(doc_date));
+                    __stmtItems.setString(4, doc_time);
+                    __stmtItems.setString(5, doc_no);
+                    __stmtItems.setString(6, cust_code);
+                    __stmtItems.setInt(7, 0);
+                    __stmtItems.setString(8, item.getString("item_code"));
+                    __stmtItems.setString(9, item.getString("item_name"));
+                    __stmtItems.setString(10, item.getString("unit_code"));
+                    __stmtItems.setBigDecimal(11, toDecimal(item.getString("qty")));          // ✅ numeric
+                    __stmtItems.setBigDecimal(12, toDecimal(item.getString("price")));        // ✅ numeric
+                    __stmtItems.setBigDecimal(13, toDecimal(item.getString("sum_amount")));   // ✅ numeric
+                    __stmtItems.setInt(14, i);
+                    __stmtItems.setBigDecimal(15, toDecimal(item.getString("stand_value"))); // ✅ numeric
+                    __stmtItems.setBigDecimal(16, toDecimal(item.getString("divide_value")));// ✅ numeric
+                    __stmtItems.setBigDecimal(17, toDecimal(item.getString("ratio")));
+                    __stmtItems.setInt(18, 1);
+                    __stmtItems.setDate(19, toSqlDate(doc_date));
+                    __stmtItems.setString(20, doc_time);
+                    __stmtItems.setString(21, creator_code);
+                    __stmtItems.setBigDecimal(22, toDecimal(item.getString("sum_amount")));   // ✅ numeric
+                    __stmtItems.setString(23, item.getString("doc_no"));
+                    __stmtItems.setInt(24, -1);
+                    __stmtItems.setString(25, item.getString("wh_code"));
+                    __stmtItems.setString(26, item.getString("shelf_code"));
+                    __stmtItems.setInt(27, Integer.parseInt(tax_type));
+                    __stmtItems.setBigDecimal(28, toDecimal(item.getString("sum_amount")));
+                    __stmtItems.setInt(29, Integer.parseInt(item.getString("tax_type")));
+                    __stmtItems.addBatch();
+                }
+                __stmtItems.executeBatch();
+                __stmtItems.close();
+
+                // --- 4) ic_trans INSERT ---
+                // BUG FIX #4: เพิ่ม VALUES ที่หายไป
+                String sqlPoTrans = "INSERT INTO ic_trans "
+                        + "(trans_type, trans_flag, doc_date, doc_time, doc_no, inquiry_type, vat_type, "
+                        + " cust_code, vat_rate, user_request, doc_format_code, creator_code, remark, branch_code,total_value, total_before_vat, total_vat_value, " // numeric x3
+                        + "total_after_vat, total_except_vat, " // numeric x2
+                        + "total_amount, balance_amount,tax_doc_no,tax_doc_date,total_discount ) "
+                        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?);";
+
+                PreparedStatement __stmtPoTrans = __conn.prepareStatement(sqlPoTrans);
+                __stmtPoTrans.setInt(1, 1);
+                __stmtPoTrans.setInt(2, 12);
+                __stmtPoTrans.setDate(3, toSqlDate(doc_date));
+                __stmtPoTrans.setString(4, doc_time);
+                __stmtPoTrans.setString(5, doc_no);
+                __stmtPoTrans.setInt(6, Integer.parseInt(sale_type));
+                __stmtPoTrans.setInt(7, Integer.parseInt(tax_type));
+                __stmtPoTrans.setString(8, cust_code);
+                __stmtPoTrans.setBigDecimal(9, toDecimal(vat_rate));
+                __stmtPoTrans.setString(10, creator_code);
+                __stmtPoTrans.setString(11, "PU");
+                __stmtPoTrans.setString(12, creator_code);
+                __stmtPoTrans.setString(13, remark);
+                __stmtPoTrans.setString(14, branch_code);
+                __stmtPoTrans.setBigDecimal(15, totalValue);         // total_value       numeric
+                __stmtPoTrans.setBigDecimal(16, totalBeforeVat);     // total_before_vat  numeric
+                __stmtPoTrans.setBigDecimal(17, totalVatValue);      // total_vat_value   numeric
+                __stmtPoTrans.setBigDecimal(18, totalAfterVat);      // total_after_vat   numeric
+                __stmtPoTrans.setBigDecimal(19, totalExceptVat);     // total_except_vat  numeric
+                __stmtPoTrans.setBigDecimal(20, totalAmount);        // total_amount      numeric
+                __stmtPoTrans.setBigDecimal(21, totalAmount);        // balance_amount    numeric (= total_amount)
+                __stmtPoTrans.setString(22, doc_no);
+                __stmtPoTrans.setDate(23, toSqlDate(doc_date));
+                __stmtPoTrans.setBigDecimal(24, totalDiscount);
+                __stmtPoTrans.executeUpdate();
+                __stmtPoTrans.close();
+
+                String sqlGLTrans = "INSERT INTO gl_journal_vat_buy "
+                        + "(trans_type,trans_flag,doc_date,doc_no,vat_date,vat_doc_no,vat_base_amount,vat_rate,vat_total_amount,vat_type,vat_amount,branch_code,tax_no,ap_code,ap_name,vat_effective_period,vat_effective_year,vat_calc) "
+                        + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
+
+                PreparedStatement __stmtGLTrans = __conn.prepareStatement(sqlGLTrans);
+                __stmtGLTrans.setInt(1, 1);
+                __stmtGLTrans.setInt(2, 12);
+                __stmtGLTrans.setDate(3, toSqlDate(doc_date));
+                __stmtGLTrans.setString(4, doc_no);
+                __stmtGLTrans.setDate(5, toSqlDate(doc_date));
+                __stmtGLTrans.setString(6, doc_no);
+                __stmtGLTrans.setBigDecimal(7, totalBeforeVat);
+                __stmtGLTrans.setBigDecimal(8, toDecimal(vat_rate));
+                __stmtGLTrans.setBigDecimal(9, totalAfterVat);
+                __stmtGLTrans.setInt(10, Integer.parseInt(tax_type));
+                __stmtGLTrans.setBigDecimal(11, totalVatValue);
+                __stmtGLTrans.setString(12, ap_branch_code);
+                __stmtGLTrans.setString(13, ap_tax_id);
+                __stmtGLTrans.setString(14, ap_cust_code);
+                __stmtGLTrans.setString(15, ap_cust_name);
+                __stmtGLTrans.setInt(16, Integer.parseInt(doc_date.split("-")[1]));
+                __stmtGLTrans.setInt(17, Integer.parseInt(doc_date.split("-")[0]));
+                __stmtGLTrans.setInt(18, 1);
+
+                __stmtGLTrans.executeUpdate();
+                __stmtGLTrans.close();
+
+                __conn.commit();
+                __objResponse.put("msg", "success");
+                __objResponse.put("success", true);
+
+            } catch (Exception ex) {
+                __conn.rollback();
+                throw ex;
+            } finally {
+                __conn.close();
+            }
+
+        } catch (JSONException ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+
+        return Response.ok(__objResponse.toString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getPUDocList")
+    public Response getPUDocList(
+            @QueryParam("search") String strSearch,
+            @QueryParam("fromdate") String strFromDate,
+            @QueryParam("todate") String strTodate
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String where = "";
+
+            if (!strFromDate.equals("") && !strTodate.equals("")) {
+                where += " and doc_date between '" + strFromDate + "' and '" + strTodate + "' ";
+            }
+            if (!strSearch.equals("")) {
+                where = "";
+                where += " and (doc_no like '%" + strSearch + "%' or cust_code like '%" + strSearch + "%' or user_request like '%" + strSearch + "%') ";
+            }
+
+            // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
+            String __strQUERY1 = "select trans_type,trans_flag,doc_date,doc_time,doc_no,doc_ref,cust_code,coalesce((select name_1 from ap_supplier ap where ap.code = cust_code),'') as cust_name,creator_code,remark,"
+                    + "  (\n"
+                    + "    SELECT ARRAY_TO_STRING(\n"
+                    + "      ARRAY(\n"
+                    + "        SELECT billing_no \n"
+                    + "        FROM ap_ar_trans_detail \n"
+                    + "        WHERE ap_ar_trans_detail.doc_no = ic_trans.doc_no\n"
+                    + "      ), ','\n"
+                    + "    )\n"
+                    + "  ) AS po_doc_list"
+                    + " from ic_trans where trans_flag=12 and last_status = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            System.out.println(__strQUERY1);
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+
+            while (__rs1.next()) {
+                JSONObject obj = new JSONObject();
+
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("cust_name", __rs1.getString("cust_name"));
+
+                obj.put("creator_code", __rs1.getString("creator_code"));
+                obj.put("doc_ref", __rs1.getString("doc_ref"));
+                obj.put("po_doc_list", __rs1.getString("po_doc_list"));
                 obj.put("remark", __rs1.getString("remark"));
 
                 __jsonArr.put(obj);
@@ -2408,6 +2775,98 @@ public class PurchaseOnlineService {
                             + "doc_date, doc_time, doc_no, " // date, varchar(5), varchar(25)
                             + "cust_code,item_code,item_name,unit_code,barcode,qty,price,creator_code,create_datetime,stand_value,divide_value,ratio,line_number,calc_flag,sum_amount,doc_date_calc, doc_time_calc) values (1,6,1,'" + _doc_date + "','" + _doc_time + "','" + _doc_no + "','" + __cust_code + "','" + _item_code + "','" + _item_name + "','" + _unit_code + "','" + _barcode + "'"
                             + ",'" + _qty + "','" + _price + "','" + __creator_code + "','now()','" + _stand_value + "','" + _divide_value + "','" + _ratio + "','" + i + "',1,'" + (Float.parseFloat(_qty) * Float.parseFloat(_price)) + "','" + _doc_date + "','" + _doc_time + "');");
+
+                }
+                Statement __stmt2;
+
+                System.out.println("__query_builder " + __query_builder);
+
+                __stmt2 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                __stmt2.executeUpdate(__query_builder.toString());
+                __objResponse.put("msg", "success");
+                __objResponse.put("success", true);
+                __stmt2.close();
+                __conn.close();
+
+            } else {
+                return Response.status(400).entity("{ERROR: Data is null}").build();
+            }
+
+        } catch (JSONException ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(__objResponse.toString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    @POST
+    @Path("/updatePUDetail")
+    public Response updatePUDetail(
+            @QueryParam("docno") String strDocNo,
+            String data
+    ) throws Exception {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+
+        __objResponse.put("success", false);
+        try {
+            String _guid_code = "";
+            String _item_code = "";
+            String _item_name = "";
+            String _unit_code = "";
+            String _barcode = "";
+            String _qty = "";
+            String _price = "";
+            String _wh_code = "";
+            String _shelf_code = "";
+            String __cust_code = "";
+            String __creator_code = "";
+            String _stand_value = "";
+            String _divide_value = "";
+            String _ratio = "";
+            String _doc_no = "";
+            String _doc_date = "";
+            String _doc_time = "";
+            if (data != null) {
+
+                JSONArray objJSArr = new JSONArray(data);
+
+                StringBuilder __query_builder = new StringBuilder();
+                UUID uuid = UUID.randomUUID();
+                String strGUID = uuid.toString();
+
+                _routine __routine = new _routine();
+                Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+
+                String __deleteQuery = "delete from ic_trans_detail where doc_no = '" + strDocNo + "'";
+                System.out.println("__deleteQuery " + __deleteQuery.toString());
+
+                Statement __stmtdelete = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                __stmtdelete.executeUpdate(__deleteQuery.toString());
+                __stmtdelete.close();
+
+                for (int i = 0; i < objJSArr.length(); i++) {
+                    JSONObject objJSData = objJSArr.getJSONObject(i);
+                    _doc_no = objJSData.has("doc_no") ? objJSData.getString("doc_no") : "";
+                    _doc_date = objJSData.has("doc_date") ? objJSData.getString("doc_date") : "";
+                    _doc_time = objJSData.has("doc_time") ? objJSData.getString("doc_time") : "";
+                    __cust_code = objJSData.has("cust_code") ? objJSData.getString("cust_code") : "";
+                    __creator_code = objJSData.has("emp_code") ? objJSData.getString("emp_code") : "";
+                    _item_code = objJSData.has("item_code") ? objJSData.getString("item_code") : "";
+                    _item_name = objJSData.has("item_name") ? objJSData.getString("item_name") : "";
+                    _unit_code = objJSData.has("unit_code") ? objJSData.getString("unit_code") : "";
+                    _barcode = objJSData.has("barcode") ? objJSData.getString("barcode") : "";
+                    _qty = objJSData.has("qty") ? objJSData.getString("qty") : "1";
+                    _price = objJSData.has("price") ? objJSData.getString("price") : "0";
+                    _stand_value = objJSData.has("stand_value") ? objJSData.getString("stand_value") : "1";
+                    _divide_value = objJSData.has("divide_value") ? objJSData.getString("divide_value") : "1";
+                    _ratio = objJSData.has("ratio") ? objJSData.getString("ratio") : "1";
+                    _wh_code = objJSData.has("wh_code") ? objJSData.getString("wh_code") : "";
+                    _shelf_code = objJSData.has("shelf_code") ? objJSData.getString("shelf_code") : "";
+                    __query_builder.append("insert into ic_trans_detail (trans_type, trans_flag,vat_type, " // smallint, smallint
+                            + "doc_date, doc_time, doc_no, " // date, varchar(5), varchar(25)
+                            + "cust_code,item_code,item_name,unit_code,barcode,qty,price,creator_code,create_datetime,stand_value,divide_value,ratio,line_number,calc_flag,sum_amount,doc_date_calc, doc_time_calc,wh_code,shelf_code) values (1,12,1,'" + _doc_date + "','" + _doc_time + "','" + _doc_no + "','" + __cust_code + "','" + _item_code + "','" + _item_name + "','" + _unit_code + "','" + _barcode + "'"
+                            + ",'" + _qty + "','" + _price + "','" + __creator_code + "','now()','" + _stand_value + "','" + _divide_value + "','" + _ratio + "','" + i + "',1,'" + (Float.parseFloat(_qty) * Float.parseFloat(_price)) + "','" + _doc_date + "','" + _doc_time + "','" + _wh_code + "','" + _shelf_code + "');");
 
                 }
                 Statement __stmt2;
@@ -2643,7 +3102,7 @@ public class PurchaseOnlineService {
             }
 
             // String __strQUERY1 = "select coalesce(remark,'') as remark ,trans_flag,doc_no,doc_date,doc_time,cust_code,send_type,total_amount,sale_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(sale_code) limit 1),'') as emp_name from ic_trans where cust_code = '" + strCust + "' and trans_flag = '" + strTrans + "' order by doc_date limit 50 ";
-            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,user_request,approve_status,remark,creator_code,approve_code,coalesce((select doc_no from ic_trans icx where icx.doc_ref = ic.doc_no and icx.trans_flag=4),'') as doc_ref,coalesce((select create_datetime from ic_trans icx where icx.doc_ref = ic.doc_no and icx.trans_flag=4),now()) as approve_datetime from ic_trans ic where doc_format_code = 'PR' and last_status = 0 " + where + " order by doc_date desc,doc_time desc limit 100";
+            String __strQUERY1 = "select doc_date,doc_time,doc_no,cust_code,coalesce((select name_1 from ap_supplier ap where ap.code = cust_code),'') as cust_name,user_request,approve_status,remark,creator_code,approve_code,coalesce((select doc_no from ic_trans icx where icx.doc_ref = ic.doc_no and icx.trans_flag=4),'') as doc_ref,coalesce((select create_datetime from ic_trans icx where icx.doc_ref = ic.doc_no and icx.trans_flag=4),now()) as approve_datetime from ic_trans ic where doc_format_code = 'PR' and last_status = 0  " + where + " order by doc_date desc,doc_time desc limit 100";
 
             Statement __stmt1;
             ResultSet __rs1;
@@ -2660,6 +3119,7 @@ public class PurchaseOnlineService {
                 obj.put("doc_date", __rs1.getString("doc_date"));
                 obj.put("doc_time", __rs1.getString("doc_time"));
                 obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("cust_name", __rs1.getString("cust_name"));
                 obj.put("user_request", __rs1.getString("user_request"));
                 obj.put("approve_status", __rs1.getString("approve_status"));
                 obj.put("approve_code", __rs1.getString("approve_code"));
@@ -2826,9 +3286,542 @@ public class PurchaseOnlineService {
         return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
     }
 
+    @POST
+    @Path("/getPODetail")
+    public Response getPODetail(
+            String data
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            JSONArray __jsonArr = new JSONArray();
+            JSONObject obj = new JSONObject();
+            if (data != null) {
+
+                JSONArray objJSArr = new JSONArray(data);
+
+                String docnos = "";
+                for (int i = 0; i < objJSArr.length(); i++) {
+                    JSONObject objJSData = objJSArr.getJSONObject(i);
+                    if (i != 0) {
+                        docnos += ",'" + objJSData.getString("doc_no") + "'";
+                    } else {
+                        docnos += "'" + objJSData.getString("doc_no") + "'";
+                    }
+                }
+
+                String __strQUERYCount = "SELECT \n"
+                        + "  item_code,\n"
+                        + "  item_name,\n"
+                        + "  unit_code,\n"
+                        + "  SUM(qty) AS sum_qty,\n"
+                        + "  MAX(price) AS max_price,\n"
+                        + "  SUM(qty) *   MAX(price) as sum_amount,\n"
+                        + "  wh_code,\n"
+                        + "  shelf_code,\n"
+                        + "  stand_value,\n"
+                        + "  divide_value,\n"
+                        + "  ratio,\n"
+                        + "  COALESCE((SELECT maximum_qty FROM ic_inventory_detail WHERE ic_code = item_code), 0) AS maximum_qty,\n"
+                        + "  COALESCE((SELECT minimum_qty FROM ic_inventory_detail WHERE ic_code = item_code), 0) AS minimum_qty\n"
+                        + "FROM ic_trans_detail \n"
+                        + "WHERE doc_no IN (" + docnos + ")\n"
+                        + "GROUP BY item_code, item_name, unit_code, wh_code, shelf_code, stand_value, divide_value, ratio;";
+                System.out.println("__strQUERYCount" + __strQUERYCount);
+                Statement __stmtTotal = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet _rsTotal = __stmtTotal.executeQuery(__strQUERYCount);
+                JSONArray _jsonArrx = new JSONArray();
+                while (_rsTotal.next()) {
+
+                    JSONObject objx = new JSONObject();
+                    objx.put("item_code", _rsTotal.getString("item_code"));
+                    objx.put("item_name", _rsTotal.getString("item_name"));
+                    objx.put("unit_code", _rsTotal.getString("unit_code"));
+                    objx.put("minimum_qty", _rsTotal.getString("minimum_qty"));
+                    objx.put("maximum_qty", _rsTotal.getString("maximum_qty"));
+                    objx.put("qty", _rsTotal.getString("sum_qty"));
+                    objx.put("stand_value", _rsTotal.getString("stand_value"));
+                    objx.put("divide_value", _rsTotal.getString("divide_value"));
+                    objx.put("ratio", _rsTotal.getString("ratio"));
+                    objx.put("price", _rsTotal.getString("max_price"));
+                    objx.put("sum_amount", _rsTotal.getString("sum_amount"));
+                    _jsonArrx.put(objx);
+
+                }
+                _rsTotal.close();
+                __stmtTotal.close();
+                obj.put("items", _jsonArrx);
+
+                __conn.close();
+                __objResponse.put("data", obj);
+
+                __objResponse.put("success", true);
+            } else {
+                return Response.status(400).entity("{ERROR: datanull}").build();
+            }
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getDocImage/{guid_code}")
+    public Response getDocImage(
+            @PathParam("guid_code") String guidCode
+    ) throws Exception {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        if (guidCode == null || guidCode.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        _routine __routine = new _routine();
+
+        String sql = "SELECT image_file FROM sml_doc_images WHERE guid_code = ? LIMIT 1";
+
+        try (Connection conn = __routine._connect(
+                strDatabaseName.toLowerCase() + "_images",
+                _global.FILE_CONFIG(strProvider));
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, guidCode.trim());
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                }
+
+                // สำคัญสำหรับ Postgres(bytea): ใช้ getBytes ไม่ใช้ Blob
+                byte[] imageBytes = rs.getBytes("image_file");
+                if (imageBytes == null || imageBytes.length == 0) {
+                    return Response.status(Response.Status.NOT_FOUND).build();
+                }
+
+                String mime = detectImageMime(imageBytes);
+                if (mime == null) {
+                    // ถ้าคุณ “รู้แน่” ว่าเก็บ PNG เสมอ ให้ return "image/png" ไปเลยจะดีกว่า
+                    mime = "application/octet-stream";
+                }
+
+                return Response.ok(imageBytes)
+                        .type(mime) // ต้องเป็น image/png หรือ image/jpeg เพื่อให้ <img> render
+                        .header("Cache-Control", "public, max-age=86400")
+                        .build();
+            }
+        }
+    }
+
+    private static String detectImageMime(byte[] b) {
+        if (b == null || b.length < 4) {
+            return null;
+        }
+
+        // PNG
+        if (b.length >= 8
+                && (b[0] & 0xFF) == 0x89 && b[1] == 0x50 && b[2] == 0x4E && b[3] == 0x47
+                && (b[4] & 0xFF) == 0x0D && (b[5] & 0xFF) == 0x0A && (b[6] & 0xFF) == 0x1A && (b[7] & 0xFF) == 0x0A) {
+            return "image/png";
+        }
+        // JPEG
+        if (b.length >= 3
+                && (b[0] & 0xFF) == 0xFF && (b[1] & 0xFF) == 0xD8 && (b[2] & 0xFF) == 0xFF) {
+            return "image/jpeg";
+        }
+        // GIF
+        if (b.length >= 6
+                && b[0] == 'G' && b[1] == 'I' && b[2] == 'F' && b[3] == '8'
+                && (b[4] == '7' || b[4] == '9') && b[5] == 'a') {
+            return "image/gif";
+        }
+        // BMP
+        if (b.length >= 2 && b[0] == 'B' && b[1] == 'M') {
+            return "image/bmp";
+        }
+        // WEBP
+        if (b.length >= 12
+                && b[0] == 'R' && b[1] == 'I' && b[2] == 'F' && b[3] == 'F'
+                && b[8] == 'W' && b[9] == 'E' && b[10] == 'B' && b[11] == 'P') {
+            return "image/webp";
+        }
+
+        return null;
+    }
+
+    @POST
+    @Path("/saveDocImage")
+    public Response saveDocImage(
+            String data) throws Exception {
+
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        try {
+            String docnoRaw = "";
+            String image_file = "";
+
+            if (data != null) {
+                JSONObject objJSData = new JSONObject(data);
+                docnoRaw = objJSData.has("doc_no") ? objJSData.getString("doc_no") : "";
+                image_file = objJSData.has("image_file") ? objJSData.getString("image_file") : "";
+            }
+
+            // แปลง doc_no เป็น list
+            java.util.LinkedHashSet<String> docNos = new java.util.LinkedHashSet<>();
+            for (String p : docnoRaw.split(",")) {
+                String v = (p == null) ? "" : p.trim();
+                if (!v.isEmpty()) {
+                    docNos.add(v);
+                }
+            }
+
+            if (docNos.isEmpty()) {
+                __objResponse.put("msg", "doc_no is empty");
+                return Response.status(400).entity(__objResponse.toString()).build();
+            }
+
+            // decode รูปครั้งเดียว
+            String imgreplaced = image_file
+                    .replace("data:image/png;base64,", "")
+                    .replace("data:image/gif;base64,", "")
+                    .replace("data:image/jpg;base64,", "")
+                    .replace("data:image/bmp;base64,", "")
+                    .replace("data:image/jpeg;base64,", "");
+
+            byte[] bytesDecoded = Base64.decodeBase64(imgreplaced.getBytes());
+
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName.toLowerCase() + "_images", _global.FILE_CONFIG(strProvider));
+            Connection __conn2 = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+
+            String query = "INSERT INTO sml_doc_images (image_id,image_file,system_id,guid_code,image_order) values (?,?,?,?,?);";
+            String query2 = "INSERT INTO sml_doc_images (image_id,system_id,guid_code,image_order) values (?,?,?,?)";
+
+            __conn.setAutoCommit(false);
+            __conn2.setAutoCommit(false);
+
+            try (PreparedStatement __stmt = __conn.prepareStatement(query);
+                    PreparedStatement __stmt2 = __conn2.prepareStatement(query2)) {
+
+                for (String dn : docNos) {
+                    // ✅ ต้องการ insert 2 รอบ => สร้าง GUID ใหม่ต่อ doc_no (ถ้าต้องการ GUID เดียวกันทุก doc_no ให้ย้ายออกนอกลูป)
+                    String strGUID = java.util.UUID.randomUUID().toString();
+
+                    // insert ไป db _images
+                    __stmt.setString(1, dn);
+                    __stmt.setBytes(2, bytesDecoded);
+                    __stmt.setString(3, "");
+                    __stmt.setString(4, strGUID);
+                    __stmt.setInt(5, 0);
+                    __stmt.addBatch();
+
+                    // insert ไป db หลัก
+                    __stmt2.setString(1, dn);
+                    __stmt2.setString(2, "");
+                    __stmt2.setString(3, strGUID);
+                    __stmt2.setInt(4, 0);
+                    __stmt2.addBatch();
+                }
+
+                __stmt.executeBatch();
+                __stmt2.executeBatch();
+
+                __conn.commit();
+                __conn2.commit();
+            } catch (Exception e) {
+                __conn.rollback();
+                __conn2.rollback();
+                throw e;
+            } finally {
+                __conn.close();
+                __conn2.close();
+            }
+
+            __objResponse.put("msg", "success");
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+
+        return Response.ok(__objResponse.toString(), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getImagesList")
+    public Response getImagesList(
+            @QueryParam("doc_no") String strDocNo) {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            String strProvider = "DEMO";
+            String strDatabaseName = "demo1_images";
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+            JSONArray jsarr = new JSONArray();
+            if (strDocNo == null || strDocNo.trim().isEmpty()) {
+                __objResponse.put("success", true);
+                __objResponse.put("data", jsarr);
+                __conn.close();
+                return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+            }
+
+            String[] parts = strDocNo.split(",");
+            java.util.LinkedHashSet<String> docNos = new java.util.LinkedHashSet<>();
+            for (String p : parts) {
+                String v = (p == null) ? "" : p.trim();
+                if (!v.isEmpty()) {
+                    // escape ' ให้เป็น '' กัน SQL พัง
+                    v = v.replace("'", "''");
+                    docNos.add(v);
+                }
+            }
+
+            if (docNos.isEmpty()) {
+                __objResponse.put("success", true);
+                __objResponse.put("data", jsarr);
+                __conn.close();
+                return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+            }
+
+            StringBuilder inList = new StringBuilder();
+            int i = 0;
+            for (String d : docNos) {
+                if (i++ > 0) {
+                    inList.append(",");
+                }
+                inList.append("'").append(d).append("'");
+            }
+
+            String __strQUERY1 = "SELECT image_id,guid_code FROM sml_doc_images  where image_id IN (" + inList + ") order by image_id ";
+            System.out.println(__strQUERY1);
+            Statement __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet __rsHead = __stmt1.executeQuery(__strQUERY1);
+
+            while (__rsHead.next()) {
+
+                JSONObject obj = new JSONObject();
+                obj.put("image_id", __rsHead.getString("image_id"));
+                obj.put("guid_code", __rsHead.getString("guid_code"));
+
+                jsarr.put(obj);
+            }
+
+            __objResponse.put("success", true);
+            __objResponse.put("data", jsarr);
+            __rsHead.close();
+            __stmt1.close();
+            __conn.close();
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/deleteDocImage")
+    public Response deleteDocImage(
+            @QueryParam("guid_code") String strGuid) {
+        JSONObject __objResponse = new JSONObject();
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        __objResponse.put("success", false);
+        try {
+            System.out.println("xxxxx");
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName.toLowerCase() + "_images", _global.FILE_CONFIG(strProvider));
+            Connection __conn2 = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
+            String __strQUERY1 = "delete FROM sml_doc_images WHERE guid_code ='" + strGuid + "' ;";
+            System.out.println("__strQUERY1 " + __strQUERY1);
+            Statement __stmt1;
+            Statement __stmt2;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __stmt1.executeUpdate(__strQUERY1);
+            __stmt1.close();
+            __conn.close();
+
+            __stmt2 = __conn2.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __stmt2.executeUpdate(__strQUERY1);
+            __stmt2.close();
+            __conn2.close();
+
+            __objResponse.put("success", true);
+            __objResponse.put("data", new JSONArray());
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
     @GET
     @Path("/getDocDetail")
     public Response getDocDetail(
+            @QueryParam("doc_no") String strDocNo
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "select *,creator_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(creator_code) limit 1),'') as emp_name from ic_trans where  doc_no = '" + strDocNo + "' ";
+            Statement __stmt1;
+            ResultSet __rs1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            JSONObject obj = new JSONObject();
+            while (__rs1.next()) {
+
+                obj.put("remark", __rs1.getString("remark"));
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("send_type", __rs1.getString("send_type"));
+                obj.put("total_discount", __rs1.getString("total_discount"));
+                obj.put("total_amount", __rs1.getString("total_amount"));
+                obj.put("emp_code", __rs1.getString("emp_code"));
+                obj.put("emp_name", __rs1.getString("emp_name"));
+                obj.put("items", new JSONArray());
+
+                String __strQUERYCount = "select ref_doc_no,item_code,item_name,qty,unit_code,price,wh_code,shelf_code,stand_value,divide_value,ratio,sum_amount,coalesce((select maximum_qty from ic_inventory_detail where ic_code = item_code ),0) as maximum_qty,coalesce((select minimum_qty from ic_inventory_detail where ic_code = item_code ),0) as minimum_qty  from ic_trans_detail where doc_no = '" + __rs1.getString("doc_no") + "'";
+                Statement __stmtTotal = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet _rsTotal = __stmtTotal.executeQuery(__strQUERYCount);
+                JSONArray _jsonArrx = new JSONArray();
+                while (_rsTotal.next()) {
+
+                    JSONObject objx = new JSONObject();
+                    objx.put("ref_doc_no", _rsTotal.getString("ref_doc_no"));
+                    objx.put("item_code", _rsTotal.getString("item_code"));
+                    objx.put("item_name", _rsTotal.getString("item_name"));
+                    objx.put("unit_code", _rsTotal.getString("unit_code"));
+                    objx.put("minimum_qty", _rsTotal.getString("minimum_qty"));
+                    objx.put("maximum_qty", _rsTotal.getString("maximum_qty"));
+                    objx.put("wh_code", _rsTotal.getString("wh_code"));
+                    objx.put("shelf_code", _rsTotal.getString("shelf_code"));
+                    objx.put("stand_value", _rsTotal.getString("stand_value"));
+                    objx.put("qty", _rsTotal.getString("qty"));
+                    objx.put("divide_value", _rsTotal.getString("divide_value"));
+                    objx.put("ratio", _rsTotal.getString("ratio"));
+                    objx.put("price", _rsTotal.getString("price"));
+                    objx.put("sum_amount", _rsTotal.getString("sum_amount"));
+                    _jsonArrx.put(objx);
+
+                }
+                _rsTotal.close();
+                __stmtTotal.close();
+                obj.put("items", _jsonArrx);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", obj);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getPUDocDetail")
+    public Response getPUDocDetail(
+            @QueryParam("doc_no") String strDocNo
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "select *,creator_code as emp_code,coalesce((select name_1 from erp_user where upper(code) = upper(creator_code) limit 1),'') as emp_name from ic_trans where  doc_no = '" + strDocNo + "' ";
+            Statement __stmt1;
+            ResultSet __rs1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            JSONObject obj = new JSONObject();
+            while (__rs1.next()) {
+
+                obj.put("remark", __rs1.getString("remark"));
+                obj.put("doc_no", __rs1.getString("doc_no"));
+                obj.put("doc_date", __rs1.getString("doc_date"));
+                obj.put("doc_time", __rs1.getString("doc_time"));
+                obj.put("cust_code", __rs1.getString("cust_code"));
+                obj.put("send_type", __rs1.getString("send_type"));
+                obj.put("total_value", __rs1.getString("total_value"));
+                obj.put("total_discount", __rs1.getString("total_discount"));
+                obj.put("total_before_vat", __rs1.getString("total_before_vat"));
+                obj.put("total_after_vat", __rs1.getString("total_after_vat"));
+                obj.put("total_except_vat", __rs1.getString("total_except_vat"));
+                obj.put("total_amount", __rs1.getString("total_amount"));
+                obj.put("emp_code", __rs1.getString("emp_code"));
+                obj.put("emp_name", __rs1.getString("emp_name"));
+                obj.put("tax_type", __rs1.getString("vat_type"));
+                obj.put("items", new JSONArray());
+
+                String __strQUERYCount = "select ref_doc_no,item_code,item_name,qty,unit_code,price,wh_code,shelf_code,stand_value,divide_value,ratio,sum_amount,coalesce((select maximum_qty from ic_inventory_detail where ic_code = item_code ),0) as maximum_qty,coalesce((select minimum_qty from ic_inventory_detail where ic_code = item_code ),0) as minimum_qty  from ic_trans_detail where doc_no = '" + __rs1.getString("doc_no") + "'";
+                Statement __stmtTotal = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet _rsTotal = __stmtTotal.executeQuery(__strQUERYCount);
+                JSONArray _jsonArrx = new JSONArray();
+                while (_rsTotal.next()) {
+
+                    JSONObject objx = new JSONObject();
+                    objx.put("ref_doc_no", _rsTotal.getString("ref_doc_no"));
+                    objx.put("item_code", _rsTotal.getString("item_code"));
+                    objx.put("item_name", _rsTotal.getString("item_name"));
+                    objx.put("unit_code", _rsTotal.getString("unit_code"));
+                    objx.put("minimum_qty", _rsTotal.getString("minimum_qty"));
+                    objx.put("maximum_qty", _rsTotal.getString("maximum_qty"));
+                    objx.put("wh_code", _rsTotal.getString("wh_code"));
+                    objx.put("shelf_code", _rsTotal.getString("shelf_code"));
+                    objx.put("stand_value", _rsTotal.getString("stand_value"));
+                    objx.put("qty", _rsTotal.getString("qty"));
+                    objx.put("divide_value", _rsTotal.getString("divide_value"));
+                    objx.put("ratio", _rsTotal.getString("ratio"));
+                    objx.put("price", _rsTotal.getString("price"));
+                    objx.put("sum_amount", _rsTotal.getString("sum_amount"));
+                    _jsonArrx.put(objx);
+
+                }
+                _rsTotal.close();
+                __stmtTotal.close();
+                obj.put("items", _jsonArrx);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("data", obj);
+
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getDocPoDetail")
+    public Response getDocPoDetail(
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DEMO";
@@ -2861,7 +3854,48 @@ public class PurchaseOnlineService {
                 obj.put("emp_name", __rs1.getString("emp_name"));
                 obj.put("items", new JSONArray());
 
-                String __strQUERYCount = "select qty,item_code,item_name,qty,unit_code,price,wh_code,shelf_code,stand_value,divide_value,ratio,sum_amount,coalesce((select maximum_qty from ic_inventory_detail where ic_code = item_code ),0) as maximum_qty,coalesce((select minimum_qty from ic_inventory_detail where ic_code = item_code ),0) as minimum_qty  from ic_trans_detail where doc_no = '" + __rs1.getString("doc_no") + "'";
+                String __strQUERYCount = "SELECT \n"
+                        + "    po.item_code,\n"
+                        + "    po.item_name,\n"
+                        + "    po.unit_code,\n"
+                        + "    po.qty                          AS po_qty,\n"
+                        + "    COALESCE(SUM(pu.qty), 0)        AS pu_qty,\n"
+                        + "    po.qty - COALESCE(SUM(pu.qty), 0) AS balance_qty,\n"
+                        + "    po.price,\n"
+                        + " po.wh_code,\n"
+                        + "po.shelf_code,\n"
+                        + "po.stand_value,\n"
+                        + "po.divide_value,\n"
+                        + "po.ratio,\n"
+                        + "coalesce((select tax_type from ic_inventory where code = po.item_code ),0) as tax_type,\n"
+                        + "coalesce((select maximum_qty from ic_inventory_detail where ic_code = po.item_code ),0) as maximum_qty,\n"
+                        + "coalesce((select minimum_qty from ic_inventory_detail where ic_code = po.item_code ),0) as minimum_qty,\n"
+                        + "    CASE \n"
+                        + "        WHEN SUM(pu.qty) > 0 THEN 1 \n"
+                        + "        ELSE 0 \n"
+                        + "    END AS updateable\n"
+                        + "FROM ic_trans_detail po\n"
+                        + "-- หา doc_no ของ PU ทั้งหมดที่อ้างอิง PO นี้\n"
+                        + "LEFT JOIN ap_ar_trans_detail ref \n"
+                        + "    ON ref.billing_no = po.doc_no\n"
+                        + "-- JOIN ดึง qty จาก PU แต่ละใบ\n"
+                        + "LEFT JOIN ic_trans_detail pu \n"
+                        + "    ON pu.doc_no      = ref.doc_no\n"
+                        + "    AND pu.item_code  = po.item_code\n"
+                        + "    AND pu.trans_flag = 12\n"
+                        + "WHERE po.doc_no     =  '" + __rs1.getString("doc_no") + "' "
+                        + "  AND po.trans_flag = 6\n"
+                        + "GROUP BY \n"
+                        + "    po.item_code,\n"
+                        + "    po.item_name,\n"
+                        + "    po.unit_code,\n"
+                        + "    po.qty,\n"
+                        + "    po.price,\n"
+                        + "     po.wh_code,\n"
+                        + "po.shelf_code,\n"
+                        + "po.stand_value,\n"
+                        + "po.divide_value,\n"
+                        + "po.ratio";
                 Statement __stmtTotal = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
                 ResultSet _rsTotal = __stmtTotal.executeQuery(__strQUERYCount);
                 JSONArray _jsonArrx = new JSONArray();
@@ -2876,11 +3910,15 @@ public class PurchaseOnlineService {
                     objx.put("wh_code", _rsTotal.getString("wh_code"));
                     objx.put("shelf_code", _rsTotal.getString("shelf_code"));
                     objx.put("stand_value", _rsTotal.getString("stand_value"));
-                    objx.put("qty", _rsTotal.getString("qty"));
+                    objx.put("tax_type", _rsTotal.getString("tax_type"));
+                    objx.put("po_qty", _rsTotal.getString("po_qty"));
+                    objx.put("pu_qty", _rsTotal.getString("pu_qty"));
+                    objx.put("balance_qty", _rsTotal.getString("balance_qty"));
+                    objx.put("updateable", _rsTotal.getString("updateable"));
                     objx.put("divide_value", _rsTotal.getString("divide_value"));
                     objx.put("ratio", _rsTotal.getString("ratio"));
                     objx.put("price", _rsTotal.getString("price"));
-                    objx.put("sum_amount", _rsTotal.getString("sum_amount"));
+
                     _jsonArrx.put(objx);
 
                 }
@@ -3607,6 +4645,84 @@ public class PurchaseOnlineService {
     }
 
     @GET
+    @Path("/getVatRate")
+    public Response getVatRate() {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "select vat_rate from erp_option limit 1";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            __objResponse.put("vat_rate", "7");
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rs1.next()) {
+                __objResponse.put("vat_rate", __rs1.getString("vat_rate"));
+
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSupplierDetail")
+    public Response getSupplierDetail(
+            @QueryParam("cust_code") String strCustCode) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "select ap_code,tax_id,(select name_1 from ap_supplier where code = ap_code ) as cust_name,branch_code,branch_type from ap_supplier_detail where ap_code  = '" + strCustCode + "'";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+            __objResponse.put("tax_id", "");
+            __objResponse.put("cust_code", "");
+            __objResponse.put("cust_name", "");
+            __objResponse.put("branch_code", "");
+            __objResponse.put("branch_type", "0");
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rs1.next()) {
+                __objResponse.put("cust_code", __rs1.getString("ap_code"));
+                __objResponse.put("tax_id", __rs1.getString("tax_id"));
+                __objResponse.put("cust_name", __rs1.getString("cust_name"));
+                __objResponse.put("branch_code", __rs1.getString("branch_code"));
+                __objResponse.put("branch_type", __rs1.getString("branch_type"));
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("success", true);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
     @Path("/getWarehouseList")
     public Response getWarehouseList() {
         String strProvider = "DEMO";
@@ -3631,6 +4747,183 @@ public class PurchaseOnlineService {
                 JSONObject obj = new JSONObject();
                 obj.put("code", __rs1.getString("code"));
                 obj.put("name", __rs1.getString("name_1"));
+                __jsonArr.put(obj);
+
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("success", true);
+            __objResponse.put("data", __jsonArr);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getShelfList")
+    public Response getShelfList(
+            @QueryParam("wh_code") String strWhCode) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "select code,name_1 from ic_shelf where whcode = '" + strWhCode + "'";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rs1.next()) {
+
+                JSONObject obj = new JSONObject();
+                obj.put("code", __rs1.getString("code"));
+                obj.put("name", __rs1.getString("name_1"));
+                __jsonArr.put(obj);
+
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("success", true);
+            __objResponse.put("data", __jsonArr);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getBarcodeItemSearch")
+    public Response getBarcodeItemSearch(
+            @QueryParam("search") String strSearch,
+            @QueryParam("custcode") String strCustcode
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            String _where = "";
+            StringBuilder __where = new StringBuilder();
+            if (strSearch.trim().length() > 0) {
+                String[] __fieldList = {"ic_code", "barcode", "description"};
+                String[] __keyword = strSearch.trim().split(" ");
+                for (int __field = 0; __field < __fieldList.length; __field++) {
+                    if (__keyword.length > 0) {
+                        if (__where.length() > 0) {
+                            __where.append(" or ");
+                        } else {
+                            __where.append("  ");
+                        }
+                        __where.append("(");
+                        for (int __loop = 0; __loop < __keyword.length; __loop++) {
+                            if (__loop > 0) {
+                                __where.append(" and ");
+                            }
+                            __where.append("upper(" + __fieldList[__field]
+                                    + ") like \'%"
+                                    + __keyword[__loop].toUpperCase() + "%\'");
+                        }
+                        __where.append(")");
+                        _where += " and " + __where.toString();
+                    }
+                }
+            }
+
+            String __strQUERY1 = "select ic_code as item_code,barcode,description as item_name,unit_code,coalesce((select tax_type from ic_inventory where code = ic_code ),0) as tax_type,"
+                    + " coalesce((select price from ic_trans_detail where ic_trans_detail.item_code=ic_inventory_barcode.ic_code and ic_trans_detail.cust_code='" + strCustcode + "' and ic_trans_detail.unit_code = ic_inventory_barcode.unit_code and trans_flag = 12 order by doc_date desc limit 1),0) as price"
+                    + " ,coalesce((select stand_value from ic_unit_use where ic_unit_use.code=ic_inventory_barcode.unit_code and ic_unit_use.ic_code=ic_inventory_barcode.ic_code),0) as stand_value \n"
+                    + ",coalesce((select divide_value from ic_unit_use where ic_unit_use.code=ic_inventory_barcode.unit_code and ic_unit_use.ic_code=ic_inventory_barcode.ic_code),0) as divide_value\n"
+                    + ",coalesce((select ratio from ic_unit_use where ic_unit_use.code=ic_inventory_barcode.unit_code and ic_unit_use.ic_code=ic_inventory_barcode.ic_code),0) as ratio "
+                    + "from ic_inventory_barcode where 1=1 " + _where + "  limit 100";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rs1.next()) {
+
+                JSONObject obj = new JSONObject();
+                obj.put("item_code", __rs1.getString("item_code"));
+                obj.put("barcode", __rs1.getString("barcode"));
+                obj.put("item_name", __rs1.getString("item_name"));
+                obj.put("unit_code", __rs1.getString("unit_code"));
+                obj.put("tax_type", __rs1.getString("tax_type"));
+                obj.put("price", __rs1.getString("price"));
+                obj.put("stand_value", __rs1.getString("stand_value"));
+                obj.put("divide_value", __rs1.getString("divide_value"));
+                obj.put("ratio", __rs1.getString("ratio"));
+                __jsonArr.put(obj);
+
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+            __objResponse.put("success", true);
+            __objResponse.put("data", __jsonArr);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getBarcodeItem")
+    public Response getBarcodeItem(
+            @QueryParam("barcode") String strBarcode,
+            @QueryParam("custcode") String strCustcode
+    ) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "select ic_code as item_code,barcode,description as item_name,unit_code,coalesce((select tax_type from ic_inventory where code = ic_code ),0) as tax_type,"
+                    + " coalesce((select price from ic_trans_detail where ic_trans_detail.item_code=ic_inventory_barcode.ic_code and ic_trans_detail.cust_code='" + strCustcode + "' and ic_trans_detail.unit_code = ic_inventory_barcode.unit_code and trans_flag = 12 order by doc_date desc limit 1),0) as price"
+                    + " ,coalesce((select stand_value from ic_unit_use where ic_unit_use.code=ic_inventory_barcode.unit_code and ic_unit_use.ic_code=ic_inventory_barcode.ic_code),0) as stand_value \n"
+                    + ",coalesce((select divide_value from ic_unit_use where ic_unit_use.code=ic_inventory_barcode.unit_code and ic_unit_use.ic_code=ic_inventory_barcode.ic_code),0) as divide_value\n"
+                    + ",coalesce((select ratio from ic_unit_use where ic_unit_use.code=ic_inventory_barcode.unit_code and ic_unit_use.ic_code=ic_inventory_barcode.ic_code),0) as ratio "
+                    + "from ic_inventory_barcode where barcode = '" + strBarcode + "'";
+
+            Statement __stmt1;
+            ResultSet __rs1;
+
+            __stmt1 = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            __rs1 = __stmt1.executeQuery(__strQUERY1);
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rs1.next()) {
+
+                JSONObject obj = new JSONObject();
+                obj.put("item_code", __rs1.getString("item_code"));
+                obj.put("barcode", __rs1.getString("barcode"));
+                obj.put("item_name", __rs1.getString("item_name"));
+                obj.put("unit_code", __rs1.getString("unit_code"));
+                obj.put("price", __rs1.getString("price"));
+                obj.put("tax_type", __rs1.getString("tax_type"));
+                obj.put("stand_value", __rs1.getString("stand_value"));
+                obj.put("divide_value", __rs1.getString("divide_value"));
+                obj.put("ratio", __rs1.getString("ratio"));
                 __jsonArr.put(obj);
 
             }
@@ -3806,7 +5099,7 @@ public class PurchaseOnlineService {
             if (!strCustCode.equals("")) {
                 where += " and ( code like '%" + strCustCode + "%'  or name_1 like '%" + strCustCode + "%') ";
             }
-            String __strQUERY1 = "SELECT code,name_1 as name FROM erp_user  where name_2='' " + where + " limit 50";
+            String __strQUERY1 = "SELECT code,name_1 as name FROM erp_user  where 1=1 " + where + " limit 50";
 
             Statement __stmt1;
             ResultSet __rs1;
@@ -3829,6 +5122,89 @@ public class PurchaseOnlineService {
             __conn.close();
             __objResponse.put("success", true);
             __objResponse.put("data", __jsonArr);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getEmpPermission")
+    public Response getEmpPermission(@QueryParam("emp_code") String empCode) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strQUERY1 = "SELECT screen_code, is_allow FROM emp_permission WHERE emp_code = ?";
+
+            PreparedStatement __stmt1 = __conn.prepareStatement(__strQUERY1);
+            __stmt1.setString(1, empCode);
+            ResultSet __rs1 = __stmt1.executeQuery();
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rs1.next()) {
+                JSONObject obj = new JSONObject();
+                obj.put("screen_code", __rs1.getString("screen_code"));
+                obj.put("is_allow", __rs1.getInt("is_allow"));
+                __jsonArr.put(obj);
+            }
+            __rs1.close();
+            __stmt1.close();
+            __conn.close();
+
+            __objResponse.put("success", true);
+            __objResponse.put("data", __jsonArr);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @POST
+    @Path("/saveEmpPermission")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveEmpPermission(String strBody) {
+        String strProvider = "DEMO";
+        String strDatabaseName = "demo1";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        try {
+            JSONObject body = new JSONObject(strBody);
+            String empCode = body.getString("emp_code");
+            String createdBy = body.optString("created_by", "");
+            JSONArray perms = body.getJSONArray("permissions");
+
+            _routine __routine = new _routine();
+            Connection __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+            __conn.setAutoCommit(false);
+
+            String __strSQL = "INSERT INTO emp_permission (emp_code, screen_code, is_allow, created_by) "
+                    + "VALUES (?, ?, ?, ?) "
+                    + "ON CONFLICT (emp_code, screen_code) "
+                    + "DO UPDATE SET is_allow = EXCLUDED.is_allow, created_by = EXCLUDED.created_by, updated_at = NOW()";
+
+            PreparedStatement __stmt = __conn.prepareStatement(__strSQL);
+            for (int i = 0; i < perms.length(); i++) {
+                JSONObject p = perms.getJSONObject(i);
+                __stmt.setString(1, empCode);
+                __stmt.setString(2, p.getString("screen_code"));
+                __stmt.setInt(3, p.getInt("is_allow"));
+                __stmt.setString(4, createdBy);
+                __stmt.addBatch();
+            }
+            __stmt.executeBatch();
+            __conn.commit();
+            __stmt.close();
+            __conn.close();
+
+            __objResponse.put("success", true);
+            __objResponse.put("message", "บันทึกสำเร็จ");
 
         } catch (Exception ex) {
             return Response.status(400).entity("{ERROR: " + ex.getMessage() + "}").build();
