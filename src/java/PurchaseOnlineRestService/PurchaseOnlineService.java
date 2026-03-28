@@ -156,11 +156,12 @@ public class PurchaseOnlineService {
             Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
 
 //            String __strQUERY1 = "SELECT * from ps_cart_order_temp where cust_code = '" + strCustCode + "'";
+            String __whCondition = (strWhCode != null && !strWhCode.trim().isEmpty()) ? " and w.wh_code = '" + strWhCode + "' " : "";
             String __strQUERY1 = "SELECT \n"
                     + "    w.*\n"
                     + "\n"
                     + "FROM    ps_cart_order_temp w  WHERE \n"
-                    + "    w.cust_code = '" + strCustCode + "' and w.wh_code = '" + strWhCode + "' "
+                    + "    w.cust_code = '" + strCustCode + "' " + __whCondition
                     + "ORDER BY \n"
                     + "    w.item_code;";
             System.out.println(__strQUERY1);
@@ -7204,6 +7205,671 @@ public class PurchaseOnlineService {
             jsonArray.put(obj);
         }
         return jsonArray;
+    }
+
+    // ============================================================
+    // Balance endpoints (ported from OrderOnlineService)
+    // ============================================================
+
+    private JSONArray executeBalanceQuery(Connection conn, String sql) throws Exception {
+        Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        ResultSet rs = stmt.executeQuery(sql);
+        JSONArray arr = new JSONArray();
+        ResultSetMetaData meta = rs.getMetaData();
+        int colCount = meta.getColumnCount();
+        while (rs.next()) {
+            JSONObject row = new JSONObject();
+            for (int i = 1; i <= colCount; i++) {
+                row.put(meta.getColumnLabel(i), rs.getString(i) != null ? rs.getString(i) : "");
+            }
+            arr.put(row);
+        }
+        rs.close();
+        stmt.close();
+        return arr;
+    }
+
+    private Connection getBalanceConnection() throws Exception {
+        _routine __routine = new _routine();
+        return __routine._connect("kbg", _global.FILE_CONFIG("DATA"));
+    }
+
+    @GET
+    @Path("/getBalanceListLite")
+    public Response getBalanceListLite(
+            @QueryParam("search") String strSearch,
+            @QueryParam("warehouse") String strWarehouse,
+            @QueryParam("shelf_from") String strShelfFrom,
+            @QueryParam("shelf_to") String strShelfTo,
+            @QueryParam("groupsub") String strGroupSub,
+            @QueryParam("groupsub2") String strGroupSub2,
+            @QueryParam("brand") String strBrand,
+            @QueryParam("model") String strModel,
+            @QueryParam("category2") String strCategory,
+            @QueryParam("format") String strFormat,
+            @QueryParam("sort") String strSort,
+            @QueryParam("sort_col") String strSortCol,
+            @QueryParam("offset") String strOffset,
+            @QueryParam("limit") String strLimit,
+            @QueryParam("isstock") String strIsStock,
+            @QueryParam("stockfilter") String strStockFilter,
+            @QueryParam("price_from") String strPriceFrom,
+            @QueryParam("price_to") String strPriceTo,
+            @QueryParam("qty_conditions") String strQtyConditions,
+            @QueryParam("dot_years") String strDotYears
+    ) {
+        String strProvider = "DATA";
+        String strDatabaseName = "kbg";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+
+        Connection __conn = null;
+        try {
+            _routine __routine = new _routine();
+            __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            int intOffset = 0;
+            int intLimit = 30;
+            try { intOffset = Integer.parseInt(strOffset); } catch (Exception ignored) {}
+            try { intLimit = Integer.parseInt(strLimit); } catch (Exception ignored) {}
+
+            String _where = "";
+            if (strSearch != null && strSearch.trim().length() > 0) {
+                String[] __fieldList = {"ic_inventory.name_1", "ic_inventory.code", "ic_inventory_detail.dimension_15"};
+                String[] __searchGroups = strSearch.trim().split("\\|");
+                StringBuilder __outerWhere = new StringBuilder();
+                for (String __group : __searchGroups) {
+                    String __groupTrimmed = __group.trim();
+                    if (__groupTrimmed.isEmpty()) continue;
+                    String[] __keyword = __groupTrimmed.split(" ");
+                    StringBuilder __groupWhere = new StringBuilder();
+                    for (String __field : __fieldList) {
+                        StringBuilder __fieldCond = new StringBuilder();
+                        for (int __loop = 0; __loop < __keyword.length; __loop++) {
+                            if (__loop > 0) __fieldCond.append(" and ");
+                            __fieldCond.append("upper(").append(__field)
+                                    .append(") like '%").append(__keyword[__loop].trim().toUpperCase()).append("%'");
+                        }
+                        if (__groupWhere.length() > 0) __groupWhere.append(" or ");
+                        __groupWhere.append("(").append(__fieldCond).append(")");
+                    }
+                    if (__outerWhere.length() > 0) __outerWhere.append(" or ");
+                    __outerWhere.append("(").append(__groupWhere).append(")");
+                }
+                if (__outerWhere.length() > 0) _where += " and (" + __outerWhere.toString() + ") ";
+            }
+
+            String __warehouse = (strWarehouse != null && !strWarehouse.trim().isEmpty()) ? strWarehouse.trim() : "";
+            String __shelfFrom = (strShelfFrom != null && !strShelfFrom.trim().isEmpty()) ? strShelfFrom.trim() : "";
+            String __shelfTo = (strShelfTo != null && !strShelfTo.trim().isEmpty()) ? strShelfTo.trim() : "";
+            String __groupSub = (strGroupSub != null && !strGroupSub.trim().isEmpty()) ? strGroupSub.trim() : "";
+            String __groupSub2 = (strGroupSub2 != null && !strGroupSub2.trim().isEmpty()) ? strGroupSub2.trim() : "";
+            String __brand = (strBrand != null && !strBrand.trim().isEmpty()) ? strBrand.trim() : "";
+            String __model = (strModel != null && !strModel.trim().isEmpty()) ? strModel.trim() : "";
+            String __category = (strCategory != null && !strCategory.trim().isEmpty()) ? strCategory.trim() : "";
+            String __format = (strFormat != null && !strFormat.trim().isEmpty()) ? strFormat.trim() : "";
+            String __sort = (strSort != null && !strSort.trim().isEmpty()) ? strSort.trim() : "asc";
+            String __sortCol = (strSortCol != null && !strSortCol.trim().isEmpty()) ? strSortCol.trim() : "";
+            String __stockFilter = (strStockFilter != null && !strStockFilter.trim().isEmpty()) ? strStockFilter.trim() : "";
+            String __priceFrom = (strPriceFrom != null && !strPriceFrom.trim().isEmpty()) ? strPriceFrom.trim() : "";
+            String __priceTo = (strPriceTo != null && !strPriceTo.trim().isEmpty()) ? strPriceTo.trim() : "";
+            String __qtyConditions = (strQtyConditions != null && !strQtyConditions.trim().isEmpty()) ? strQtyConditions.trim() : "";
+            String __dotYears = (strDotYears != null && !strDotYears.trim().isEmpty()) ? strDotYears.trim() : "";
+            boolean __onlyInStock = "1".equals(strIsStock);
+
+            Integer flag = 0;
+            StringBuilder __strQuery = new StringBuilder();
+            StringBuilder __strIcQuerySub = new StringBuilder();
+            StringBuilder __strWarehouseQuerySub = new StringBuilder();
+            StringBuilder __strShelfQuerySub = new StringBuilder();
+
+            __strIcQuerySub.append("select string_agg(ic_inventory.code,',') as code from ic_inventory left join ic_inventory_detail on ic_inventory_detail.ic_code = ic_inventory.code where 1=1 ");
+
+            String currentYearPfx = String.valueOf(java.time.Year.now().getValue()).substring(2, 4);
+            __strQuery.append("select ");
+            __strQuery.append("  ic_inventory.code          as item_code, ");
+            __strQuery.append("  ic_inventory.name_1        as item_name, ");
+            __strQuery.append("  ic_inventory.unit_standard as unit_code, ");
+            __strQuery.append("  '' as shelf_list, ");
+            __strQuery.append("  '' as warehouse_list, ");
+            __strQuery.append("  coalesce((select pf.price_0 from ic_inventory_price_formula pf ");
+            __strQuery.append("    where pf.ic_code = ic_inventory.code and pf.unit_code = ic_inventory.unit_standard ");
+            __strQuery.append("    and pf.sale_type = 2 limit 1), '0') as price_0, ");
+            __strQuery.append("  coalesce((select pf.price_9 from ic_inventory_price_formula pf ");
+            __strQuery.append("    where pf.ic_code = ic_inventory.code and pf.unit_code = ic_inventory.unit_standard ");
+            __strQuery.append("    and pf.sale_type = 2 limit 1), '0') as price_9, ");
+            __strQuery.append("  coalesce((select d.description from ic_description d ");
+            __strQuery.append("    where d.ic_code = ic_inventory.code limit 1), '') as description, ");
+            __strQuery.append("  coalesce((select sum(case when left(stk0.location,2)='" + currentYearPfx + "' then stk0.balance_qty else 0 end) ");
+            __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk0 where stk0.balance_qty>0), 0) as balance_qty_current_year, ");
+            __strQuery.append("  coalesce((select sum(case when left(stk0.location,2)!='" + currentYearPfx + "' then stk0.balance_qty else 0 end) ");
+            __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk0 where stk0.balance_qty>0), 0) as balance_qty_other_year, ");
+            __strQuery.append("  coalesce((select string_agg(distinct left(stk0.location,2),',') ");
+            __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk0 where stk0.balance_qty>0), '') as dot_year_list ");
+            __strQuery.append("from ic_inventory left join ic_inventory_detail on ic_inventory_detail.ic_code = ic_inventory.code ");
+
+            if ("gt0".equals(__stockFilter)) {
+                __strQuery.append(" where 1=1 and ic_inventory.balance_qty > 0 ");
+            } else if ("zero".equals(__stockFilter)) {
+                __strQuery.append(" where 1=1 and ic_inventory.balance_qty <= 0 ");
+            } else if ("low".equals(__stockFilter)) {
+                __strQuery.append(" where 1=1 and ic_inventory.balance_qty > 0 and ic_inventory.balance_qty < coalesce(ic_inventory_detail.minimum_qty, 0) ");
+            } else if (__onlyInStock) {
+                __strQuery.append(" where 1=1 and ic_inventory.balance_qty > 0 ");
+            } else {
+                __strQuery.append(" where 1=1 ");
+            }
+
+            if (!__groupSub.isEmpty()) {
+                String[] vals = __groupSub.split(",");
+                __strQuery.append(" and ic_inventory.group_sub in ('" + String.join("','", vals) + "') ");
+                __strIcQuerySub.append(" and ic_inventory.group_sub in ('" + String.join("','", vals) + "') ");
+            }
+            if (!__groupSub2.isEmpty()) {
+                String[] vals = __groupSub2.split(",");
+                __strQuery.append(" and ic_inventory.group_sub2 in ('" + String.join("','", vals) + "') ");
+                __strIcQuerySub.append(" and ic_inventory.group_sub2 in ('" + String.join("','", vals) + "') ");
+            }
+            if (!__brand.isEmpty()) {
+                String[] vals = __brand.split(",");
+                __strQuery.append(" and ic_inventory.item_brand in ('" + String.join("','", vals) + "') ");
+                __strIcQuerySub.append(" and ic_inventory.item_brand in ('" + String.join("','", vals) + "') ");
+            }
+            if (!__model.isEmpty()) {
+                String[] vals = __model.split(",");
+                __strQuery.append(" and ic_inventory.item_model in ('" + String.join("','", vals) + "') ");
+                __strIcQuerySub.append(" and ic_inventory.item_model in ('" + String.join("','", vals) + "') ");
+            }
+            if (!__category.isEmpty()) {
+                String[] vals = __category.split(",");
+                __strQuery.append(" and ic_inventory.item_category in ('" + String.join("','", vals) + "') ");
+                __strIcQuerySub.append(" and ic_inventory.item_category in ('" + String.join("','", vals) + "') ");
+            }
+            if (!__format.isEmpty()) {
+                String[] vals = __format.split(",");
+                __strQuery.append(" and ic_inventory.item_pattern in ('" + String.join("','", vals) + "') ");
+                __strIcQuerySub.append(" and ic_inventory.item_pattern in ('" + String.join("','", vals) + "') ");
+            }
+            if (!_where.equals("")) {
+                __strQuery.append(_where);
+                __strIcQuerySub.append(_where);
+            }
+
+            if (!__priceFrom.isEmpty()) {
+                __strQuery.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) >= " + __priceFrom + " ");
+                __strIcQuerySub.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) >= " + __priceFrom + " ");
+            }
+            if (!__priceTo.isEmpty()) {
+                __strQuery.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) <= " + __priceTo + " ");
+                __strIcQuerySub.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) <= " + __priceTo + " ");
+            }
+
+            if (!__dotYears.isEmpty()) {
+                String[] yrs = __dotYears.split(",");
+                StringBuilder dotIn = new StringBuilder();
+                for (String yr : yrs) {
+                    String yy = yr.trim().length() == 4 ? yr.trim().substring(2) : yr.trim();
+                    if (dotIn.length() > 0) dotIn.append("','");
+                    dotIn.append(yy);
+                }
+                String dotFilter = " and exists (select 1 from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_d where stk_d.balance_qty>0 and left(stk_d.location,2) in ('" + dotIn + "')) ";
+                __strQuery.append(dotFilter);
+                __strIcQuerySub.append(dotFilter);
+            }
+
+            if (!__qtyConditions.isEmpty()) {
+                String[] conds = __qtyConditions.split("\\|");
+                for (String cond : conds) {
+                    cond = cond.trim();
+                    if (cond.isEmpty()) continue;
+                    String op = cond.replaceAll("[0-9.]+$", "");
+                    String val = cond.replace(op, "");
+                    if (!val.isEmpty()) {
+                        String qtyFilter = " and coalesce((select sum(stk_q.balance_qty) from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_q where stk_q.balance_qty>0), 0) " + op + " " + val + " ";
+                        __strQuery.append(qtyFilter);
+                        __strIcQuerySub.append(qtyFilter);
+                    }
+                }
+            }
+
+            if (!__warehouse.isEmpty()) {
+                __strWarehouseQuerySub.append(__warehouse);
+                flag = 1;
+            }
+            if (!__shelfFrom.isEmpty() && __shelfTo.isEmpty()) {
+                __strShelfQuerySub.append(__shelfFrom);
+                flag = 1;
+            } else if (!__shelfFrom.isEmpty() && !__shelfTo.isEmpty()) {
+                __strShelfQuerySub.append("select string_agg(code,',') as code from ic_shelf where code between '")
+                        .append(__shelfFrom).append("' and '").append(__shelfTo).append("'");
+                flag = 2;
+            }
+
+            if (flag == 2) {
+                Statement __stmtShelf = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet __shelfList = __stmtShelf.executeQuery(__strShelfQuerySub.toString());
+                __strShelfQuerySub = new StringBuilder();
+                while (__shelfList.next()) __strShelfQuerySub.append(__shelfList.getString("code"));
+                __shelfList.close();
+                __stmtShelf.close();
+            }
+
+            if (flag != 0) {
+                Statement __stmtIc = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet __icList = __stmtIc.executeQuery(__strIcQuerySub.toString());
+                __strIcQuerySub = new StringBuilder();
+                while (__icList.next()) __strIcQuerySub.append(__icList.getString("code"));
+                __icList.close();
+                __stmtIc.close();
+
+                __strQuery = new StringBuilder();
+                __strQuery.append("select ");
+                __strQuery.append("  stk.ic_code      as item_code, ");
+                __strQuery.append("  stk.ic_name      as item_name, ");
+                __strQuery.append("  stk.ic_unit_code as unit_code, ");
+                __strQuery.append("  '@shelf_code@' as shelf_list, ");
+                __strQuery.append("  '@wh_code@'    as warehouse_list, ");
+                __strQuery.append("  sum(stk.balance_qty) as balance_qty, ");
+                __strQuery.append("  coalesce((select pf.price_0 from ic_inventory_price_formula pf ");
+                __strQuery.append("    where pf.ic_code = stk.ic_code and pf.unit_code = stk.ic_unit_code ");
+                __strQuery.append("    and pf.sale_type = 2 limit 1), '0') as price_0, ");
+                __strQuery.append("  coalesce((select pf.price_9 from ic_inventory_price_formula pf ");
+                __strQuery.append("    where pf.ic_code = stk.ic_code and pf.unit_code = stk.ic_unit_code ");
+                __strQuery.append("    and pf.sale_type = 2 limit 1), '0') as price_9, ");
+                __strQuery.append("  coalesce((select d.description from ic_description d ");
+                __strQuery.append("    where d.ic_code = stk.ic_code limit 1), '') as description ");
+                __strQuery.append("from sml_ic_function_stock_balance_warehouse_location(current_date, '@ic_code@', '@wh_code@', '@shelf_code@') as stk ");
+                __strQuery.append("where stk.balance_qty > 0 ");
+                __strQuery.append("group by stk.ic_code, stk.ic_name, stk.ic_unit_code ");
+
+                __strQuery = new StringBuilder(
+                        __strQuery.toString()
+                                .replace("@ic_code@", __strIcQuerySub.toString())
+                                .replace("@wh_code@", __strWarehouseQuerySub.toString())
+                                .replace("@shelf_code@", __strShelfQuerySub.toString())
+                );
+
+                if (__sortCol.isEmpty()) {
+                    __strQuery.append(" order by stk.ic_code ").append(__sort).append(" ");
+                } else if ("balance_qty_current_year".equals(__sortCol) || "balance_qty_other_year".equals(__sortCol)) {
+                    __strQuery.append(" order by sum(stk.balance_qty) ").append(__sort).append(" ");
+                } else {
+                    __strQuery.append(" order by ").append(__sortCol).append(" ").append(__sort).append(" ");
+                }
+            } else {
+                if (__sortCol.isEmpty()) {
+                    __strQuery.append(" order by ic_inventory.code ").append(__sort).append(" ");
+                } else if ("balance_qty_current_year".equals(__sortCol) || "balance_qty_other_year".equals(__sortCol)) {
+                    // ORDER BY จะอยู่ใน outer wrapper query แทน
+                } else {
+                    __strQuery.append(" order by ").append(__sortCol).append(" ").append(__sort).append(" ");
+                }
+            }
+
+            String __strPaginationQuery = " OFFSET " + intOffset + " LIMIT " + (intLimit + 1);
+            String __finalQuery;
+            if (!__sortCol.isEmpty() && ("balance_qty_current_year".equals(__sortCol) || "balance_qty_other_year".equals(__sortCol)) && flag == 0) {
+                __finalQuery = "SELECT * FROM (" + __strQuery.toString() + ") AS _sorted ORDER BY " + __sortCol + " " + __sort + " NULLS LAST" + __strPaginationQuery;
+            } else {
+                __finalQuery = __strQuery.toString() + __strPaginationQuery;
+            }
+            Statement __stmtData = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet __rsData = __stmtData.executeQuery(__finalQuery);
+
+            JSONArray __jsonArr = new JSONArray();
+            int __rowCount = 0;
+            while (__rsData.next()) {
+                __rowCount++;
+                if (__rowCount > intLimit) break;
+                JSONObject obj = new JSONObject();
+                obj.put("item_code", __rsData.getString("item_code"));
+                obj.put("item_name", __rsData.getString("item_name"));
+                obj.put("unit_code", __rsData.getString("unit_code"));
+                obj.put("shelf_list", __rsData.getString("shelf_list"));
+                obj.put("warehouse_list", __rsData.getString("warehouse_list"));
+                obj.put("price_0", __rsData.getString("price_0"));
+                obj.put("price_9", __rsData.getString("price_9"));
+                obj.put("description", __rsData.getString("description"));
+                obj.put("price", "");
+                obj.put("update_date", "");
+                if (flag != 0) {
+                    String __balQty = "";
+                    try { __balQty = __rsData.getString("balance_qty"); } catch (Exception ignored) {}
+                    obj.put("balance_qty", __balQty);
+                    obj.put("balance_qty_current_year", __balQty);
+                    obj.put("balance_qty_other_year", "0");
+                    obj.put("dot_year_list", "");
+                    obj.put("year_weak", "");
+                } else {
+                    String bqCur = "", bqOth = "", dotYearList = "";
+                    try { bqCur = __rsData.getString("balance_qty_current_year"); } catch (Exception ignored) {}
+                    try { bqOth = __rsData.getString("balance_qty_other_year"); } catch (Exception ignored) {}
+                    try { dotYearList = __rsData.getString("dot_year_list"); } catch (Exception ignored) {}
+                    double cur = bqCur != null ? Double.parseDouble(bqCur) : 0;
+                    double oth = bqOth != null ? Double.parseDouble(bqOth) : 0;
+                    obj.put("balance_qty_current_year", String.format("%,.0f", cur));
+                    obj.put("balance_qty_other_year", String.format("%,.0f", oth));
+                    obj.put("balance_qty", String.format("%,.0f", cur + oth));
+                    obj.put("dot_year_list", dotYearList != null ? dotYearList : "");
+                    obj.put("year_weak", "");
+                }
+                __jsonArr.put(obj);
+            }
+            __rsData.close();
+            __stmtData.close();
+
+            boolean hasNext = __rowCount > intLimit;
+            JSONObject objPage = new JSONObject();
+            objPage.put("hasNext", hasNext);
+            objPage.put("page", intLimit > 0 ? intOffset / intLimit : 0);
+            objPage.put("perPage", intLimit);
+
+            __objResponse.put("success", true);
+            __objResponse.put("data", __jsonArr);
+            __objResponse.put("pagination", objPage);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getBalanceDetail")
+    public Response getBalanceDetail(
+            @QueryParam("item_code") String strItemCode,
+            @QueryParam("shelf_list") String strShelf,
+            @QueryParam("warehouse") String strWarehouse
+    ) {
+        String strProvider = "DATA";
+        String strDatabaseName = "kbg";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+
+        Connection __conn = null;
+        try {
+            _routine __routine = new _routine();
+            __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String __strItemCode = (strItemCode != null && !strItemCode.trim().isEmpty()) ? strItemCode.trim() : "";
+            String __strShelf = (strShelf != null && !strShelf.trim().isEmpty()) ? strShelf.trim() : "";
+            String __warehouse = (strWarehouse != null && !strWarehouse.trim().isEmpty()) ? strWarehouse.trim() : "";
+
+            StringBuilder __strQuery = new StringBuilder();
+            __strQuery.append("select ");
+            __strQuery.append("  ic_code      as item_code, ");
+            __strQuery.append("  ic_name      as item_name, ");
+            __strQuery.append("  warehouse, ");
+            __strQuery.append("  location, ");
+            __strQuery.append("  balance_qty, ");
+            __strQuery.append("  ic_unit_code as unit_code ");
+            __strQuery.append("from sml_ic_function_stock_balance_warehouse_location( ");
+            __strQuery.append("  current_date, ");
+            __strQuery.append("  '" + __strItemCode + "', ");
+            __strQuery.append("  '@wh_code@', ");
+            __strQuery.append("  '@shelf_code@') ");
+            __strQuery.append("where balance_qty > 0 ");
+
+            String finalQuery = __strQuery.toString()
+                    .replace("@wh_code@", __warehouse)
+                    .replace("@shelf_code@", __strShelf);
+
+            Statement __stmtData = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet __rsData = __stmtData.executeQuery(finalQuery);
+
+            JSONArray __jsonArr = new JSONArray();
+            while (__rsData.next()) {
+                String whCode = __rsData.getString("warehouse");
+                String locationCode = __rsData.getString("location");
+
+                JSONObject obj = new JSONObject();
+                obj.put("item_code", __rsData.getString("item_code"));
+                obj.put("item_name", __rsData.getString("item_name"));
+                obj.put("balance_qty", String.format("%,.0f", Float.parseFloat(__rsData.getString("balance_qty"))));
+                obj.put("unit_code", __rsData.getString("unit_code"));
+                obj.put("warehouse", whCode);
+                obj.put("location", locationCode);
+                obj.put("overdue", "0");
+                __jsonArr.put(obj);
+            }
+            __rsData.close();
+            __stmtData.close();
+
+            String __strCountQuery = "select count(*) as xcount from (" + finalQuery + ") as cnt";
+            Statement __stmtCount = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet __rsCount = __stmtCount.executeQuery(__strCountQuery);
+            int rowCount = 0;
+            if (__rsCount.next()) rowCount = __rsCount.getInt("xcount");
+            __rsCount.close();
+            __stmtCount.close();
+
+            __objResponse.put("success", true);
+            __objResponse.put("data", __jsonArr);
+            __objResponse.put("row_count", rowCount);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getBalanceDetailPrice")
+    public Response getBalanceDetailPrice(
+            @QueryParam("item_code") String strItemCode,
+            @QueryParam("location") String strLocation,
+            @QueryParam("unit_code") String strUnitCode,
+            @QueryParam("cust_code") String strCustCode,
+            @QueryParam("sale_type") String strSaleType
+    ) {
+        String strProvider = "DATA";
+        String strDatabaseName = "kbg";
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+
+        Connection __conn = null;
+        try {
+            _routine __routine = new _routine();
+            __conn = __routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider));
+
+            String itemCode = (strItemCode != null && !strItemCode.trim().isEmpty()) ? strItemCode.trim() : "";
+            String location = (strLocation != null && !strLocation.trim().isEmpty()) ? strLocation.trim() : "";
+            String unitCode = (strUnitCode != null && !strUnitCode.trim().isEmpty()) ? strUnitCode.trim() : "";
+            String custCode = (strCustCode != null && !strCustCode.trim().isEmpty()) ? strCustCode.trim() : "";
+            String saleType = "2";
+
+            String price = "0";
+
+            if (location.matches("\\d{4}")) {
+                String year = location.substring(0, 2);
+                String qryPrice = "SELECT "
+                        + "CASE (RIGHT(EXTRACT(YEAR FROM NOW())::int::text, 2)::int - '" + year + "'::int) "
+                        + "  WHEN 0 THEN '0' "
+                        + "  WHEN 1 THEN coalesce(price_1,'0') "
+                        + "  WHEN 2 THEN coalesce(price_2,'0') "
+                        + "  WHEN 3 THEN coalesce(price_3,'0') "
+                        + "  WHEN 4 THEN coalesce(price_4,'0') "
+                        + "  ELSE '0' END AS price "
+                        + "FROM ic_inventory_price_formula "
+                        + "WHERE ic_code = '" + itemCode + "' AND sale_type IN (0," + saleType + ") LIMIT 1";
+                Statement stmtP = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rsP = stmtP.executeQuery(qryPrice);
+                if (rsP.next()) {
+                    String p = rsP.getString("price");
+                    if (p != null && !p.trim().isEmpty()) price = p;
+                }
+                rsP.close();
+                stmtP.close();
+            }
+
+            if ("0".equals(price) && !unitCode.isEmpty()) {
+                JSONObject prices = getProductPriceLocal(itemCode, unitCode, "1", custCode, saleType);
+                JSONArray pricesArr = prices.optJSONArray("data");
+                if (pricesArr != null && pricesArr.length() > 0) {
+                    JSONObject priceObj = pricesArr.optJSONObject(0);
+                    price = priceObj != null ? priceObj.optString("price", "0") : "0";
+                }
+            }
+
+            __objResponse.put("success", true);
+            __objResponse.put("item_code", itemCode);
+            __objResponse.put("location", location);
+            __objResponse.put("price", price);
+
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchWarehouseList")
+    public Response getSearchWarehouseList() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_warehouse"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchShelfList")
+    public Response getSearchShelfList() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_shelf group by code,name_1"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchGroupSubList")
+    public Response getSearchGroupSubList() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_group_sub"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchGroupSub2List")
+    public Response getSearchGroupSub2List() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_group_sub2"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchBrandList")
+    public Response getSearchBrandList() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_brand"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchModelList")
+    public Response getSearchModelList() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_model"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchCategoryList")
+    public Response getSearchCategoryList() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_category"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("/getSearchFormatList")
+    public Response getSearchFormatList() {
+        JSONObject __objResponse = new JSONObject();
+        __objResponse.put("success", false);
+        Connection __conn = null;
+        try {
+            __conn = getBalanceConnection();
+            __objResponse.put("data", executeBalanceQuery(__conn, "SELECT code, name_1 FROM ic_pattern"));
+            __objResponse.put("success", true);
+        } catch (Exception ex) {
+            return Response.status(400).entity("{\"error\": \"" + ex.getMessage() + "\"}").build();
+        } finally {
+            if (__conn != null) { try { __conn.close(); } catch (Exception ignored) {} }
+        }
+        return Response.ok(String.valueOf(__objResponse), MediaType.APPLICATION_JSON).build();
     }
 
 }
