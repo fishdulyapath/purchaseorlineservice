@@ -62,7 +62,7 @@ public class PurchaseOnlineService {
             String data
     ) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
 
         __objResponse.put("success", false);
@@ -148,7 +148,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode,
             @QueryParam("wh_code") String strWhCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -211,7 +211,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -257,7 +257,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -303,7 +303,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -349,7 +349,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -396,7 +396,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -443,7 +443,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -490,7 +490,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -537,7 +537,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode,
             @QueryParam("sale_type") String strSaleType) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -686,7 +686,7 @@ public class PurchaseOnlineService {
 
             // --- 3. Database ---
             String strProvider = "DATA";
-            String strDatabaseName = "kbg";
+            String strDatabaseName = "data2";
 
             _routine routine = new _routine();
             try (Connection conn = routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider))) {
@@ -1025,7 +1025,7 @@ public class PurchaseOnlineService {
             UUID uuid = UUID.randomUUID();
             String strGUID = uuid.toString();
             String strProvider = "DATA";
-            String strDatabaseName = "kbg";
+            String strDatabaseName = "data2";
 
             StringBuilder __result = new StringBuilder();
             _routine __routine = new _routine();
@@ -1189,7 +1189,7 @@ public class PurchaseOnlineService {
             UUID uuid = UUID.randomUUID();
             String strGUID = uuid.toString();
             String strProvider = "DATA";
-            String strDatabaseName = "kbg";
+            String strDatabaseName = "data2";
 
             StringBuilder __result = new StringBuilder();
             _routine __routine = new _routine();
@@ -1276,7 +1276,7 @@ public class PurchaseOnlineService {
         __objResponse.put("success", false);
         try {
             _routine __routine = new _routine();
-            Connection __conn = __routine._connect("kbg", _global.FILE_CONFIG("DATA"));
+            Connection __conn = __routine._connect("data2", _global.FILE_CONFIG("DATA"));
             String __strQUERY1 = "SELECT code as user_code, name_1 as user_name FROM erp_user WHERE upper(code)=upper('" + strUserCode + "') AND password='" + strPassword + "' ORDER BY code";
 
             Statement __stmt1;
@@ -1310,7 +1310,7 @@ public class PurchaseOnlineService {
             @QueryParam("user_code") String strUserCode,
             @QueryParam("password") String strPassword) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1354,7 +1354,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust,
             @QueryParam("item_code") String strItem) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1386,7 +1386,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1452,7 +1452,7 @@ public class PurchaseOnlineService {
             @QueryParam("status") String strStatus
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1802,7 +1802,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1917,7 +1917,7 @@ public class PurchaseOnlineService {
             @QueryParam("trans_flag") String strTrans
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2103,7 +2103,7 @@ public class PurchaseOnlineService {
 //        __objResponse.put("success", false);
 //        try {
 //            String strProvider = "DATA";
-//            String strDatabaseName = "kbg";
+//            String strDatabaseName = "data2";
 //            _routine __routine = new _routine();
 //            Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
 //
@@ -2196,7 +2196,7 @@ public class PurchaseOnlineService {
 
         try {
             String strProvider = "DATA";
-            String strDatabaseName = "kbg";
+            String strDatabaseName = "data2";
             _routine routine = new _routine();
 
             try (Connection conn = routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider))) {
@@ -2396,7 +2396,7 @@ public class PurchaseOnlineService {
         __objResponse.put("success", false);
         try {
             String strProvider = "DATA";
-            String strDatabaseName = "kbg";
+            String strDatabaseName = "data2";
             _routine __routine = new _routine();
             Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
 
@@ -2425,7 +2425,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2486,7 +2486,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2547,7 +2547,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2621,7 +2621,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2688,7 +2688,7 @@ public class PurchaseOnlineService {
     @Path("/createPUDoc")
     public Response createPUDoc(String data) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
@@ -2957,7 +2957,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3027,7 +3027,7 @@ public class PurchaseOnlineService {
     @Path("/updatePoDetail")
     public Response updatePoDetail(String data) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject objResponse = new JSONObject();
         objResponse.put("success", false);
 
@@ -3174,7 +3174,7 @@ public class PurchaseOnlineService {
             String data
     ) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
 
         __objResponse.put("success", false);
@@ -3263,7 +3263,7 @@ public class PurchaseOnlineService {
 //    @Path("/createPoDoc")
 //    public Response createPoDoc(String data) throws Exception {
 //        String strProvider = "DATA";
-//        String strDatabaseName = "kbg";
+//        String strDatabaseName = "data2";
 //        JSONObject __objResponse = new JSONObject();
 //        __objResponse.put("success", false);
 //
@@ -3432,7 +3432,7 @@ public class PurchaseOnlineService {
     @Path("/createPoDoc")
     public Response createPoDoc(String data) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject objResponse = new JSONObject();
         objResponse.put("success", false);
 
@@ -3667,7 +3667,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3730,7 +3730,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3790,7 +3790,7 @@ public class PurchaseOnlineService {
             String data
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3876,7 +3876,7 @@ public class PurchaseOnlineService {
             String data
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3960,7 +3960,7 @@ public class PurchaseOnlineService {
             @PathParam("guid_code") String guidCode
     ) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         if (guidCode == null || guidCode.trim().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -4045,7 +4045,7 @@ public class PurchaseOnlineService {
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         try {
             String docnoRaw = "";
             String image_file = "";
@@ -4145,7 +4145,7 @@ public class PurchaseOnlineService {
         __objResponse.put("success", false);
         try {
             String strProvider = "DATA";
-            String strDatabaseName = "kbg_images";
+            String strDatabaseName = "data2_images";
             _routine __routine = new _routine();
             Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
             JSONArray jsarr = new JSONArray();
@@ -4214,7 +4214,7 @@ public class PurchaseOnlineService {
             @QueryParam("guid_code") String strGuid) {
         JSONObject __objResponse = new JSONObject();
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         __objResponse.put("success", false);
         try {
             System.out.println("xxxxx");
@@ -4250,7 +4250,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4327,7 +4327,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4409,7 +4409,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4545,7 +4545,7 @@ public class PurchaseOnlineService {
             @QueryParam("limit") String strLimit
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4699,7 +4699,7 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4809,7 +4809,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4893,7 +4893,7 @@ public class PurchaseOnlineService {
             @QueryParam("unit_code") String strUnitCode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4964,7 +4964,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5087,7 +5087,7 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5190,7 +5190,7 @@ public class PurchaseOnlineService {
     @Path("/getCategoryList")
     public Response getCategoryList() {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5230,7 +5230,7 @@ public class PurchaseOnlineService {
     @Path("/getVatRate")
     public Response getVatRate() {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5266,7 +5266,7 @@ public class PurchaseOnlineService {
     public Response getSupplierDetail(
             @QueryParam("cust_code") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5308,7 +5308,7 @@ public class PurchaseOnlineService {
     @Path("/getWarehouseList")
     public Response getWarehouseList() {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5349,7 +5349,7 @@ public class PurchaseOnlineService {
     public Response getShelfList(
             @QueryParam("wh_code") String strWhCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5392,7 +5392,7 @@ public class PurchaseOnlineService {
             @QueryParam("custcode") String strCustcode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5473,7 +5473,7 @@ public class PurchaseOnlineService {
             @QueryParam("custcode") String strCustcode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5525,7 +5525,7 @@ public class PurchaseOnlineService {
     @Path("/deleteItem")
     public Response deleteItem(@QueryParam("guid_code") String strGuidCode, @QueryParam("cust_code") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5553,7 +5553,7 @@ public class PurchaseOnlineService {
     @Path("/deleteAllItems")
     public Response deleteAllItems(@QueryParam("cust_code") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5581,7 +5581,7 @@ public class PurchaseOnlineService {
     @Path("/getCustomerList")
     public Response getCustomerList(@QueryParam("search") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5627,7 +5627,7 @@ public class PurchaseOnlineService {
     @Path("/getSupplierList")
     public Response getSupplierList(@QueryParam("search") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5671,7 +5671,7 @@ public class PurchaseOnlineService {
     @Path("/getEmployeeList")
     public Response getEmployeeList(@QueryParam("search") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5715,7 +5715,7 @@ public class PurchaseOnlineService {
     @Path("/getEmpPermission")
     public Response getEmpPermission(@QueryParam("emp_code") String empCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5753,7 +5753,7 @@ public class PurchaseOnlineService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveEmpPermission(String strBody) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5800,7 +5800,7 @@ public class PurchaseOnlineService {
             @QueryParam("limit") @DefaultValue("50") int limit,
             @QueryParam("offset") @DefaultValue("0") int offset) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5877,7 +5877,7 @@ public class PurchaseOnlineService {
             @QueryParam("limit") @DefaultValue("50") int limit,
             @QueryParam("offset") @DefaultValue("0") int offset) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5920,7 +5920,7 @@ public class PurchaseOnlineService {
     @Path("/getCompanyProfile")
     public Response getCompanyProfile() {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5962,7 +5962,7 @@ public class PurchaseOnlineService {
     @Path("/getImageList")
     public Response getImageList(@QueryParam("item_code") String strItemCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg_images";
+        String strDatabaseName = "data2_images";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -6005,7 +6005,7 @@ public class PurchaseOnlineService {
     public Response imagesguid(
             @QueryParam("guid_code") String strItemCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg_images";
+        String strDatabaseName = "data2_images";
         String query = "select image_file from images  where guid_code = '" + strItemCode + "'";
 
         byte[] __value = new byte[1024];
@@ -6041,7 +6041,7 @@ public class PurchaseOnlineService {
             @Context Request request
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg_images";
+        String strDatabaseName = "data2_images";
 
         if (itemCode == null || itemCode.trim().isEmpty()) {
             return Response.status(400)
@@ -6133,7 +6133,7 @@ public class PurchaseOnlineService {
             String strSaleType) {
 
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         String strVatType = "ภาษีรวมใน";
 
         String strVatRate = "7";
@@ -6665,7 +6665,7 @@ public class PurchaseOnlineService {
             @QueryParam("vat_rate") String strVatRate) {
 
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         String strVatType = "ภาษีรวมใน";
         String strSaleType = "0";
         JSONObject __objResponse = new JSONObject();
@@ -7231,7 +7231,7 @@ public class PurchaseOnlineService {
 
     private Connection getBalanceConnection() throws Exception {
         _routine __routine = new _routine();
-        return __routine._connect("kbg", _global.FILE_CONFIG("DATA"));
+        return __routine._connect("data2", _global.FILE_CONFIG("DATA"));
     }
 
     @GET
@@ -7259,7 +7259,7 @@ public class PurchaseOnlineService {
             @QueryParam("dot_years") String strDotYears
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
@@ -7584,7 +7584,7 @@ public class PurchaseOnlineService {
             @QueryParam("warehouse") String strWarehouse
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
@@ -7667,7 +7667,7 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "kbg";
+        String strDatabaseName = "data2";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
