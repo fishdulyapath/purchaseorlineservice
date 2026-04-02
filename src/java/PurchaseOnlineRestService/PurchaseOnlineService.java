@@ -7252,7 +7252,8 @@ public class PurchaseOnlineService {
             @QueryParam("offset") String strOffset,
             @QueryParam("limit") String strLimit,
             @QueryParam("isstock") String strIsStock,
-            @QueryParam("stockfilter") String strStockFilter,            @QueryParam("price_from") String strPriceFrom,
+            @QueryParam("stockfilter") String strStockFilter,
+            @QueryParam("price_from") String strPriceFrom,
             @QueryParam("price_to") String strPriceTo,
             @QueryParam("qty_from") String strQtyFrom,
             @QueryParam("qty_to") String strQtyTo
@@ -7311,7 +7312,8 @@ public class PurchaseOnlineService {
             String __sortCol = (strSortCol != null && !strSortCol.trim().isEmpty()) ? strSortCol.trim() : "";
             String __stockFilter = (strStockFilter != null && !strStockFilter.trim().isEmpty()) ? strStockFilter.trim() : "";
             String __priceFrom = (strPriceFrom != null && !strPriceFrom.trim().isEmpty()) ? strPriceFrom.trim() : "";
-            String __priceTo = (strPriceTo != null && !strPriceTo.trim().isEmpty()) ? strPriceTo.trim() : "";            String __qtyFrom = (strQtyFrom != null && !strQtyFrom.trim().isEmpty()) ? strQtyFrom.trim() : "";
+            String __priceTo = (strPriceTo != null && !strPriceTo.trim().isEmpty()) ? strPriceTo.trim() : "";
+            String __qtyFrom = (strQtyFrom != null && !strQtyFrom.trim().isEmpty()) ? strQtyFrom.trim() : "";
             String __qtyTo = (strQtyTo != null && !strQtyTo.trim().isEmpty()) ? strQtyTo.trim() : "";
             boolean __onlyInStock = "1".equals(strIsStock);
 
@@ -7364,17 +7366,18 @@ public class PurchaseOnlineService {
                 }
                 __stkExtraWhere.append(" and stk_f.location in ('" + shelfIn + "') ");
             }
-            String stkExtraWhere = __stkExtraWhere.toString();
-
-            // ============================================================
+            String stkExtraWhere = __stkExtraWhere.toString();            // ============================================================
             // ใช้ LATERAL JOIN เรียก sml_ic_function_stock_balance_warehouse_location
             // ครั้งเดียวต่อ item แล้ว aggregate ผลไว้ เพื่อใช้ทั้ง SELECT และ WHERE
             // แทนการเรียก correlated subquery ซ้ำหลายครั้งต่อ row
+            // รวม warehouse/shelf filter ไว้ด้วย เพื่อลดจาก 4 function calls → 1 ต่อ row
             // ============================================================            
             boolean needStockFunction = "zero".equals(__stockFilter)
                     || "low".equals(__stockFilter)
                     || !__qtyFrom.isEmpty()
-                    || !__qtyTo.isEmpty();
+                    || !__qtyTo.isEmpty()
+                    || !__warehouse.isEmpty()
+                    || !resolvedShelfList.isEmpty();
 
             __strQuery.append("select ");
             __strQuery.append("  ic_inventory.code          as item_code, ");
@@ -7485,38 +7488,45 @@ public class PurchaseOnlineService {
                 __strQuery.append(" and coalesce(stk_agg.total_qty, 0) <= " + __qtyTo + " ");
                 __strIcQuerySub.append(" and coalesce((select sum(stk_q.balance_qty) from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_q where stk_q.balance_qty>0), 0) <= " + __qtyTo + " ");
             }
-
             // ---------- warehouse / shelf filter ----------
-            // ใช้ WHERE EXISTS แทนการดึง item_codes ทั้งหมดแล้วเรียก function (ช้ามาก)
-            // ให้ PostgreSQL short-circuit ได้เมื่อถึง LIMIT → เร็วขึ้นมาก
-            if (!__warehouse.isEmpty()) {
-                String[] whVals = __warehouse.split(",");
-                StringBuilder whIn = new StringBuilder();
-                for (String wh : whVals) {
-                    if (whIn.length() > 0) whIn.append("','");
-                    whIn.append(wh.trim());
+            // เมื่อ needStockFunction=true → LATERAL JOIN มี stkExtraWhere กรอง warehouse/shelf แล้ว
+            // แค่เช็ค stk_agg.total_qty > 0 เพื่อให้แน่ใจว่ามี stock ใน warehouse/shelf ที่เลือก
+            // ไม่ต้องเรียก EXISTS + function อีกครั้ง → ลดจาก 4 calls เหลือ 1 call ต่อ row
+            if (!__warehouse.isEmpty() || !resolvedShelfList.isEmpty()) {
+                if (needStockFunction) {
+                    // LATERAL JOIN + stkExtraWhere กรองคลัง/ชั้นแล้ว → ใช้ stk_agg filter
+                    __strQuery.append(" and coalesce(stk_agg.total_qty, 0) > 0 ");
+                } else {
+                    // fallback: ไม่มี LATERAL JOIN → ใช้ EXISTS เดิม
+                    if (!__warehouse.isEmpty()) {
+                        String[] whVals = __warehouse.split(",");
+                        StringBuilder whIn = new StringBuilder();
+                        for (String wh : whVals) {
+                            if (whIn.length() > 0) whIn.append("','");
+                            whIn.append(wh.trim());
+                        }
+                        __strQuery.append(" and exists ( ");
+                        __strQuery.append("   select 1 from sml_ic_function_stock_balance_warehouse_location(current_date, ic_inventory.code, '', '') stk_wh ");
+                        __strQuery.append("   where stk_wh.balance_qty > 0 and stk_wh.warehouse in ('" + whIn + "') ");
+                        __strQuery.append(" ) ");
+                    }
+                    if (!resolvedShelfList.isEmpty()) {
+                        String[] shelfVals = resolvedShelfList.split(",");
+                        StringBuilder shelfIn = new StringBuilder();
+                        for (String sh : shelfVals) {
+                            if (shelfIn.length() > 0) shelfIn.append("','");
+                            shelfIn.append(sh.trim());
+                        }
+                        __strQuery.append(" and exists ( ");
+                        __strQuery.append("   select 1 from sml_ic_function_stock_balance_warehouse_location(current_date, ic_inventory.code, '', '') stk_sh ");
+                        __strQuery.append("   where stk_sh.balance_qty > 0 and stk_sh.location in ('" + shelfIn + "') ");
+                        __strQuery.append(" ) ");
+                    }
                 }
-                __strQuery.append(" and exists ( ");
-                __strQuery.append("   select 1 from sml_ic_function_stock_balance_warehouse_location(current_date, ic_inventory.code, '', '') stk_wh ");
-                __strQuery.append("   where stk_wh.balance_qty > 0 and stk_wh.warehouse in ('" + whIn + "') ");
-                __strQuery.append(" ) ");
                 flag = 1;
-                __strWarehouseQuerySub.append(__warehouse);
-            }
-
-            // resolvedShelfList ถูก resolve แล้วด้านบน — ใช้ EXISTS กรอง row เท่านั้น
-            if (!resolvedShelfList.isEmpty()) {
-                String[] shelfVals = resolvedShelfList.split(",");
-                StringBuilder shelfIn = new StringBuilder();
-                for (String sh : shelfVals) {
-                    if (shelfIn.length() > 0) shelfIn.append("','");
-                    shelfIn.append(sh.trim());
+                if (!__warehouse.isEmpty()) {
+                    __strWarehouseQuerySub.append(__warehouse);
                 }
-                __strQuery.append(" and exists ( ");
-                __strQuery.append("   select 1 from sml_ic_function_stock_balance_warehouse_location(current_date, ic_inventory.code, '', '') stk_sh ");
-                __strQuery.append("   where stk_sh.balance_qty > 0 and stk_sh.location in ('" + shelfIn + "') ");
-                __strQuery.append(" ) ");
-                flag = 1;
             }
 
             if (__sortCol.isEmpty()) {
