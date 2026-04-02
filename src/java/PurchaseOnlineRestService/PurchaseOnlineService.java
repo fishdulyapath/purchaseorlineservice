@@ -62,7 +62,7 @@ public class PurchaseOnlineService {
             String data
     ) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
 
         __objResponse.put("success", false);
@@ -148,7 +148,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode,
             @QueryParam("wh_code") String strWhCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -211,7 +211,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -257,7 +257,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -303,7 +303,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -349,7 +349,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -396,7 +396,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -443,7 +443,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -490,7 +490,7 @@ public class PurchaseOnlineService {
             @QueryParam("search") String strSearch
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -537,7 +537,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode,
             @QueryParam("sale_type") String strSaleType) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -686,7 +686,7 @@ public class PurchaseOnlineService {
 
             // --- 3. Database ---
             String strProvider = "DATA";
-            String strDatabaseName = "data2";
+            String strDatabaseName = "kbg";
 
             _routine routine = new _routine();
             try (Connection conn = routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider))) {
@@ -1025,7 +1025,7 @@ public class PurchaseOnlineService {
             UUID uuid = UUID.randomUUID();
             String strGUID = uuid.toString();
             String strProvider = "DATA";
-            String strDatabaseName = "data2";
+            String strDatabaseName = "kbg";
 
             StringBuilder __result = new StringBuilder();
             _routine __routine = new _routine();
@@ -1189,7 +1189,7 @@ public class PurchaseOnlineService {
             UUID uuid = UUID.randomUUID();
             String strGUID = uuid.toString();
             String strProvider = "DATA";
-            String strDatabaseName = "data2";
+            String strDatabaseName = "kbg";
 
             StringBuilder __result = new StringBuilder();
             _routine __routine = new _routine();
@@ -1276,7 +1276,7 @@ public class PurchaseOnlineService {
         __objResponse.put("success", false);
         try {
             _routine __routine = new _routine();
-            Connection __conn = __routine._connect("data2", _global.FILE_CONFIG("DATA"));
+            Connection __conn = __routine._connect("kbg", _global.FILE_CONFIG("DATA"));
             String __strQUERY1 = "SELECT code as user_code, name_1 as user_name FROM erp_user WHERE upper(code)=upper('" + strUserCode + "') AND password='" + strPassword + "' ORDER BY code";
 
             Statement __stmt1;
@@ -1310,7 +1310,7 @@ public class PurchaseOnlineService {
             @QueryParam("user_code") String strUserCode,
             @QueryParam("password") String strPassword) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1354,7 +1354,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust,
             @QueryParam("item_code") String strItem) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1386,7 +1386,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1452,7 +1452,7 @@ public class PurchaseOnlineService {
             @QueryParam("status") String strStatus
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1802,7 +1802,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -1917,7 +1917,7 @@ public class PurchaseOnlineService {
             @QueryParam("trans_flag") String strTrans
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2103,7 +2103,7 @@ public class PurchaseOnlineService {
 //        __objResponse.put("success", false);
 //        try {
 //            String strProvider = "DATA";
-//            String strDatabaseName = "data2";
+//            String strDatabaseName = "kbg";
 //            _routine __routine = new _routine();
 //            Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
 //
@@ -2196,7 +2196,7 @@ public class PurchaseOnlineService {
 
         try {
             String strProvider = "DATA";
-            String strDatabaseName = "data2";
+            String strDatabaseName = "kbg";
             _routine routine = new _routine();
 
             try (Connection conn = routine._connect(strDatabaseName, _global.FILE_CONFIG(strProvider))) {
@@ -2396,7 +2396,7 @@ public class PurchaseOnlineService {
         __objResponse.put("success", false);
         try {
             String strProvider = "DATA";
-            String strDatabaseName = "data2";
+            String strDatabaseName = "kbg";
             _routine __routine = new _routine();
             Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
 
@@ -2425,7 +2425,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2486,7 +2486,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2547,7 +2547,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2621,7 +2621,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -2688,7 +2688,7 @@ public class PurchaseOnlineService {
     @Path("/createPUDoc")
     public Response createPUDoc(String data) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
@@ -2957,7 +2957,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3027,7 +3027,7 @@ public class PurchaseOnlineService {
     @Path("/updatePoDetail")
     public Response updatePoDetail(String data) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject objResponse = new JSONObject();
         objResponse.put("success", false);
 
@@ -3174,7 +3174,7 @@ public class PurchaseOnlineService {
             String data
     ) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
 
         __objResponse.put("success", false);
@@ -3263,7 +3263,7 @@ public class PurchaseOnlineService {
 //    @Path("/createPoDoc")
 //    public Response createPoDoc(String data) throws Exception {
 //        String strProvider = "DATA";
-//        String strDatabaseName = "data2";
+//        String strDatabaseName = "kbg";
 //        JSONObject __objResponse = new JSONObject();
 //        __objResponse.put("success", false);
 //
@@ -3432,7 +3432,7 @@ public class PurchaseOnlineService {
     @Path("/createPoDoc")
     public Response createPoDoc(String data) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject objResponse = new JSONObject();
         objResponse.put("success", false);
 
@@ -3667,7 +3667,7 @@ public class PurchaseOnlineService {
             @QueryParam("todate") String strTodate
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3730,7 +3730,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCust
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3790,7 +3790,7 @@ public class PurchaseOnlineService {
             String data
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3876,7 +3876,7 @@ public class PurchaseOnlineService {
             String data
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -3960,7 +3960,7 @@ public class PurchaseOnlineService {
             @PathParam("guid_code") String guidCode
     ) throws Exception {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         if (guidCode == null || guidCode.trim().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
@@ -4045,7 +4045,7 @@ public class PurchaseOnlineService {
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         try {
             String docnoRaw = "";
             String image_file = "";
@@ -4145,7 +4145,7 @@ public class PurchaseOnlineService {
         __objResponse.put("success", false);
         try {
             String strProvider = "DATA";
-            String strDatabaseName = "data2_images";
+            String strDatabaseName = "kbg_images";
             _routine __routine = new _routine();
             Connection __conn = __routine._connect(strDatabaseName.toLowerCase(), _global.FILE_CONFIG(strProvider));
             JSONArray jsarr = new JSONArray();
@@ -4214,7 +4214,7 @@ public class PurchaseOnlineService {
             @QueryParam("guid_code") String strGuid) {
         JSONObject __objResponse = new JSONObject();
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         __objResponse.put("success", false);
         try {
             System.out.println("xxxxx");
@@ -4250,7 +4250,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4327,7 +4327,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4409,7 +4409,7 @@ public class PurchaseOnlineService {
             @QueryParam("doc_no") String strDocNo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4545,7 +4545,7 @@ public class PurchaseOnlineService {
             @QueryParam("limit") String strLimit
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4699,7 +4699,7 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4809,7 +4809,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4893,7 +4893,7 @@ public class PurchaseOnlineService {
             @QueryParam("unit_code") String strUnitCode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -4964,7 +4964,7 @@ public class PurchaseOnlineService {
             @QueryParam("cust_code") String strCustCode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5087,7 +5087,7 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5190,7 +5190,7 @@ public class PurchaseOnlineService {
     @Path("/getCategoryList")
     public Response getCategoryList() {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5230,7 +5230,7 @@ public class PurchaseOnlineService {
     @Path("/getVatRate")
     public Response getVatRate() {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5266,7 +5266,7 @@ public class PurchaseOnlineService {
     public Response getSupplierDetail(
             @QueryParam("cust_code") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5308,7 +5308,7 @@ public class PurchaseOnlineService {
     @Path("/getWarehouseList")
     public Response getWarehouseList() {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5349,7 +5349,7 @@ public class PurchaseOnlineService {
     public Response getShelfList(
             @QueryParam("wh_code") String strWhCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5392,7 +5392,7 @@ public class PurchaseOnlineService {
             @QueryParam("custcode") String strCustcode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5473,7 +5473,7 @@ public class PurchaseOnlineService {
             @QueryParam("custcode") String strCustcode
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5525,7 +5525,7 @@ public class PurchaseOnlineService {
     @Path("/deleteItem")
     public Response deleteItem(@QueryParam("guid_code") String strGuidCode, @QueryParam("cust_code") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5553,7 +5553,7 @@ public class PurchaseOnlineService {
     @Path("/deleteAllItems")
     public Response deleteAllItems(@QueryParam("cust_code") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5581,7 +5581,7 @@ public class PurchaseOnlineService {
     @Path("/getCustomerList")
     public Response getCustomerList(@QueryParam("search") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5627,7 +5627,7 @@ public class PurchaseOnlineService {
     @Path("/getSupplierList")
     public Response getSupplierList(@QueryParam("search") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5671,7 +5671,7 @@ public class PurchaseOnlineService {
     @Path("/getEmployeeList")
     public Response getEmployeeList(@QueryParam("search") String strCustCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5715,7 +5715,7 @@ public class PurchaseOnlineService {
     @Path("/getEmpPermission")
     public Response getEmpPermission(@QueryParam("emp_code") String empCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5753,7 +5753,7 @@ public class PurchaseOnlineService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response saveEmpPermission(String strBody) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5800,7 +5800,7 @@ public class PurchaseOnlineService {
             @QueryParam("limit") @DefaultValue("50") int limit,
             @QueryParam("offset") @DefaultValue("0") int offset) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5877,7 +5877,7 @@ public class PurchaseOnlineService {
             @QueryParam("limit") @DefaultValue("50") int limit,
             @QueryParam("offset") @DefaultValue("0") int offset) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5920,7 +5920,7 @@ public class PurchaseOnlineService {
     @Path("/getCompanyProfile")
     public Response getCompanyProfile() {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -5962,7 +5962,7 @@ public class PurchaseOnlineService {
     @Path("/getImageList")
     public Response getImageList(@QueryParam("item_code") String strItemCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2_images";
+        String strDatabaseName = "kbg_images";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
         try {
@@ -6005,7 +6005,7 @@ public class PurchaseOnlineService {
     public Response imagesguid(
             @QueryParam("guid_code") String strItemCode) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2_images";
+        String strDatabaseName = "kbg_images";
         String query = "select image_file from images  where guid_code = '" + strItemCode + "'";
 
         byte[] __value = new byte[1024];
@@ -6041,7 +6041,7 @@ public class PurchaseOnlineService {
             @Context Request request
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2_images";
+        String strDatabaseName = "kbg_images";
 
         if (itemCode == null || itemCode.trim().isEmpty()) {
             return Response.status(400)
@@ -6133,7 +6133,7 @@ public class PurchaseOnlineService {
             String strSaleType) {
 
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         String strVatType = "ภาษีรวมใน";
 
         String strVatRate = "7";
@@ -6665,7 +6665,7 @@ public class PurchaseOnlineService {
             @QueryParam("vat_rate") String strVatRate) {
 
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         String strVatType = "ภาษีรวมใน";
         String strSaleType = "0";
         JSONObject __objResponse = new JSONObject();
@@ -7231,7 +7231,7 @@ public class PurchaseOnlineService {
 
     private Connection getBalanceConnection() throws Exception {
         _routine __routine = new _routine();
-        return __routine._connect("data2", _global.FILE_CONFIG("DATA"));
+        return __routine._connect("kbg", _global.FILE_CONFIG("DATA"));
     }
 
     @GET
@@ -7252,14 +7252,13 @@ public class PurchaseOnlineService {
             @QueryParam("offset") String strOffset,
             @QueryParam("limit") String strLimit,
             @QueryParam("isstock") String strIsStock,
-            @QueryParam("stockfilter") String strStockFilter,
-            @QueryParam("price_from") String strPriceFrom,
+            @QueryParam("stockfilter") String strStockFilter,            @QueryParam("price_from") String strPriceFrom,
             @QueryParam("price_to") String strPriceTo,
-            @QueryParam("qty_conditions") String strQtyConditions,
-            @QueryParam("dot_years") String strDotYears
+            @QueryParam("qty_from") String strQtyFrom,
+            @QueryParam("qty_to") String strQtyTo
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
@@ -7312,9 +7311,8 @@ public class PurchaseOnlineService {
             String __sortCol = (strSortCol != null && !strSortCol.trim().isEmpty()) ? strSortCol.trim() : "";
             String __stockFilter = (strStockFilter != null && !strStockFilter.trim().isEmpty()) ? strStockFilter.trim() : "";
             String __priceFrom = (strPriceFrom != null && !strPriceFrom.trim().isEmpty()) ? strPriceFrom.trim() : "";
-            String __priceTo = (strPriceTo != null && !strPriceTo.trim().isEmpty()) ? strPriceTo.trim() : "";
-            String __qtyConditions = (strQtyConditions != null && !strQtyConditions.trim().isEmpty()) ? strQtyConditions.trim() : "";
-            String __dotYears = (strDotYears != null && !strDotYears.trim().isEmpty()) ? strDotYears.trim() : "";
+            String __priceTo = (strPriceTo != null && !strPriceTo.trim().isEmpty()) ? strPriceTo.trim() : "";            String __qtyFrom = (strQtyFrom != null && !strQtyFrom.trim().isEmpty()) ? strQtyFrom.trim() : "";
+            String __qtyTo = (strQtyTo != null && !strQtyTo.trim().isEmpty()) ? strQtyTo.trim() : "";
             boolean __onlyInStock = "1".equals(strIsStock);
 
             Integer flag = 0;
@@ -7324,8 +7322,60 @@ public class PurchaseOnlineService {
             StringBuilder __strShelfQuerySub = new StringBuilder();
 
             __strIcQuerySub.append("select string_agg(ic_inventory.code,',') as code from ic_inventory left join ic_inventory_detail on ic_inventory_detail.ic_code = ic_inventory.code where 1=1 ");
-
             String currentYearPfx = String.valueOf(java.time.Year.now().getValue()).substring(2, 4);
+
+            // ============================================================
+            // Resolve warehouse/shelf filter EARLY เพื่อนำไปใส่ใน LATERAL JOIN
+            // และ inline SELECT subquery ให้ balance_qty คำนวณเฉพาะคลัง/ชั้นที่เลือก
+            // ============================================================
+            String resolvedShelfList = "";
+            if (!__shelfFrom.isEmpty() && !__shelfTo.isEmpty()) {
+                Statement __stmtShelf = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet __shelfRs = __stmtShelf.executeQuery(
+                    "select string_agg(code,',') as code from ic_shelf where code between '" + __shelfFrom + "' and '" + __shelfTo + "'");
+                if (__shelfRs.next()) {
+                    resolvedShelfList = __shelfRs.getString("code");
+                    if (resolvedShelfList == null) resolvedShelfList = "";
+                }
+                __shelfRs.close();
+                __stmtShelf.close();
+            } else if (!__shelfFrom.isEmpty()) {
+                resolvedShelfList = __shelfFrom;
+            }
+
+            // สร้าง extra WHERE clause สำหรับ stock function ภายใน SELECT/LATERAL JOIN
+            // เพื่อให้ balance_qty_current_year/other_year คำนวณเฉพาะคลัง/ชั้นที่กรอง
+            StringBuilder __stkExtraWhere = new StringBuilder();
+            if (!__warehouse.isEmpty()) {
+                String[] whVals = __warehouse.split(",");
+                StringBuilder whIn = new StringBuilder();
+                for (String wh : whVals) {
+                    if (whIn.length() > 0) whIn.append("','");
+                    whIn.append(wh.trim());
+                }
+                __stkExtraWhere.append(" and stk_f.warehouse in ('" + whIn + "') ");
+            }
+            if (!resolvedShelfList.isEmpty()) {
+                String[] shelfVals = resolvedShelfList.split(",");
+                StringBuilder shelfIn = new StringBuilder();
+                for (String sh : shelfVals) {
+                    if (shelfIn.length() > 0) shelfIn.append("','");
+                    shelfIn.append(sh.trim());
+                }
+                __stkExtraWhere.append(" and stk_f.location in ('" + shelfIn + "') ");
+            }
+            String stkExtraWhere = __stkExtraWhere.toString();
+
+            // ============================================================
+            // ใช้ LATERAL JOIN เรียก sml_ic_function_stock_balance_warehouse_location
+            // ครั้งเดียวต่อ item แล้ว aggregate ผลไว้ เพื่อใช้ทั้ง SELECT และ WHERE
+            // แทนการเรียก correlated subquery ซ้ำหลายครั้งต่อ row
+            // ============================================================            
+            boolean needStockFunction = "zero".equals(__stockFilter)
+                    || "low".equals(__stockFilter)
+                    || !__qtyFrom.isEmpty()
+                    || !__qtyTo.isEmpty();
+
             __strQuery.append("select ");
             __strQuery.append("  ic_inventory.code          as item_code, ");
             __strQuery.append("  ic_inventory.name_1        as item_name, ");
@@ -7340,20 +7390,42 @@ public class PurchaseOnlineService {
             __strQuery.append("    and pf.sale_type = 2 limit 1), '0') as price_9, ");
             __strQuery.append("  coalesce((select d.description from ic_description d ");
             __strQuery.append("    where d.ic_code = ic_inventory.code limit 1), '') as description, ");
-            __strQuery.append("  coalesce((select sum(case when left(stk0.location,2)='" + currentYearPfx + "' then stk0.balance_qty else 0 end) ");
-            __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk0 where stk0.balance_qty>0), 0) as balance_qty_current_year, ");
-            __strQuery.append("  coalesce((select sum(case when left(stk0.location,2)!='" + currentYearPfx + "' then stk0.balance_qty else 0 end) ");
-            __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk0 where stk0.balance_qty>0), 0) as balance_qty_other_year, ");
-            __strQuery.append("  coalesce((select string_agg(distinct left(stk0.location,2),',') ");
-            __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk0 where stk0.balance_qty>0), '') as dot_year_list ");
+            if (needStockFunction) {
+                __strQuery.append("  coalesce(stk_agg.balance_qty_current_year, 0) as balance_qty_current_year, ");
+                __strQuery.append("  coalesce(stk_agg.balance_qty_other_year, 0) as balance_qty_other_year, ");
+                __strQuery.append("  coalesce(stk_agg.dot_year_list, '') as dot_year_list ");
+            } else {
+                __strQuery.append("  coalesce((select sum(case when left(stk_f.location,2)='" + currentYearPfx + "' then stk_f.balance_qty else 0 end) ");
+                __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_f where stk_f.balance_qty>0" + stkExtraWhere + "), 0) as balance_qty_current_year, ");
+                __strQuery.append("  coalesce((select sum(case when left(stk_f.location,2)!='" + currentYearPfx + "' then stk_f.balance_qty else 0 end) ");
+                __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_f where stk_f.balance_qty>0" + stkExtraWhere + "), 0) as balance_qty_other_year, ");
+                __strQuery.append("  coalesce((select string_agg(distinct left(stk_f.location,2),',') ");
+                __strQuery.append("    from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_f where stk_f.balance_qty>0" + stkExtraWhere + "), '') as dot_year_list ");
+            }
             __strQuery.append("from ic_inventory left join ic_inventory_detail on ic_inventory_detail.ic_code = ic_inventory.code ");
+
+            // LATERAL JOIN: เรียก function ครั้งเดียวต่อ item แล้ว aggregate
+            if (needStockFunction) {
+                __strQuery.append(" left join lateral ( ");
+                __strQuery.append("   select ");
+                __strQuery.append("     sum(case when left(stk_f.location,2)='" + currentYearPfx + "' then stk_f.balance_qty else 0 end) as balance_qty_current_year, ");
+                __strQuery.append("     sum(case when left(stk_f.location,2)!='" + currentYearPfx + "' then stk_f.balance_qty else 0 end) as balance_qty_other_year, ");
+                __strQuery.append("     sum(stk_f.balance_qty) as total_qty, ");
+                __strQuery.append("     string_agg(distinct left(stk_f.location,2), ',') as dot_year_list ");
+                __strQuery.append("   from sml_ic_function_stock_balance_warehouse_location(current_date, ic_inventory.code, '', '') stk_f ");
+                __strQuery.append("   where stk_f.balance_qty > 0 " + stkExtraWhere);
+                __strQuery.append(" ) stk_agg on true ");
+            }
 
             if ("gt0".equals(__stockFilter)) {
                 __strQuery.append(" where 1=1 and ic_inventory.balance_qty > 0 ");
             } else if ("zero".equals(__stockFilter)) {
-                __strQuery.append(" where 1=1 and ic_inventory.balance_qty <= 0 ");
+                __strQuery.append(" where 1=1 and coalesce(stk_agg.total_qty, 0) <= 0 ");
             } else if ("low".equals(__stockFilter)) {
-                __strQuery.append(" where 1=1 and ic_inventory.balance_qty > 0 and ic_inventory.balance_qty < coalesce(ic_inventory_detail.minimum_qty, 0) ");
+                // ใช้ hardcoded < 4 เหมือน OrderOnline (แทน minimum_qty ที่ต้อง evaluate ทุก row)
+                // เพิ่ม ic_inventory.balance_qty pre-filter เพื่อ skip row ที่ cached balance ไม่ตรงก่อนเรียก function
+                __strQuery.append(" where 1=1 and ic_inventory.balance_qty > 0 and ic_inventory.balance_qty < 4 ");
+                __strQuery.append(" and coalesce(stk_agg.total_qty, 0) > 0 and coalesce(stk_agg.total_qty, 0) < 4 ");
             } else if (__onlyInStock) {
                 __strQuery.append(" where 1=1 and ic_inventory.balance_qty > 0 ");
             } else {
@@ -7395,6 +7467,7 @@ public class PurchaseOnlineService {
                 __strIcQuerySub.append(_where);
             }
 
+            // ---------- price range ----------
             if (!__priceFrom.isEmpty()) {
                 __strQuery.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) >= " + __priceFrom + " ");
                 __strIcQuerySub.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) >= " + __priceFrom + " ");
@@ -7403,118 +7476,60 @@ public class PurchaseOnlineService {
                 __strQuery.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) <= " + __priceTo + " ");
                 __strIcQuerySub.append(" and coalesce(nullif((select pf2.price_0 from ic_inventory_price_formula pf2 where pf2.ic_code = ic_inventory.code and pf2.unit_code = ic_inventory.unit_standard and pf2.sale_type = 2 limit 1), '')::numeric, 0) <= " + __priceTo + " ");
             }
-
-            if (!__dotYears.isEmpty()) {
-                String[] yrs = __dotYears.split(",");
-                StringBuilder dotIn = new StringBuilder();
-                for (String yr : yrs) {
-                    String yy = yr.trim().length() == 4 ? yr.trim().substring(2) : yr.trim();
-                    if (dotIn.length() > 0) dotIn.append("','");
-                    dotIn.append(yy);
-                }
-                String dotFilter = " and exists (select 1 from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_d where stk_d.balance_qty>0 and left(stk_d.location,2) in ('" + dotIn + "')) ";
-                __strQuery.append(dotFilter);
-                __strIcQuerySub.append(dotFilter);
+            // ---------- qty_from / qty_to ----------
+            if (!__qtyFrom.isEmpty()) {
+                __strQuery.append(" and coalesce(stk_agg.total_qty, 0) >= " + __qtyFrom + " ");
+                __strIcQuerySub.append(" and coalesce((select sum(stk_q.balance_qty) from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_q where stk_q.balance_qty>0), 0) >= " + __qtyFrom + " ");
+            }
+            if (!__qtyTo.isEmpty()) {
+                __strQuery.append(" and coalesce(stk_agg.total_qty, 0) <= " + __qtyTo + " ");
+                __strIcQuerySub.append(" and coalesce((select sum(stk_q.balance_qty) from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_q where stk_q.balance_qty>0), 0) <= " + __qtyTo + " ");
             }
 
-            if (!__qtyConditions.isEmpty()) {
-                String[] conds = __qtyConditions.split("\\|");
-                for (String cond : conds) {
-                    cond = cond.trim();
-                    if (cond.isEmpty()) continue;
-                    String op = cond.replaceAll("[0-9.]+$", "");
-                    String val = cond.replace(op, "");
-                    if (!val.isEmpty()) {
-                        String qtyFilter = " and coalesce((select sum(stk_q.balance_qty) from sml_ic_function_stock_balance_warehouse_location(current_date,ic_inventory.code,'','') stk_q where stk_q.balance_qty>0), 0) " + op + " " + val + " ";
-                        __strQuery.append(qtyFilter);
-                        __strIcQuerySub.append(qtyFilter);
-                    }
-                }
-            }
-
+            // ---------- warehouse / shelf filter ----------
+            // ใช้ WHERE EXISTS แทนการดึง item_codes ทั้งหมดแล้วเรียก function (ช้ามาก)
+            // ให้ PostgreSQL short-circuit ได้เมื่อถึง LIMIT → เร็วขึ้นมาก
             if (!__warehouse.isEmpty()) {
+                String[] whVals = __warehouse.split(",");
+                StringBuilder whIn = new StringBuilder();
+                for (String wh : whVals) {
+                    if (whIn.length() > 0) whIn.append("','");
+                    whIn.append(wh.trim());
+                }
+                __strQuery.append(" and exists ( ");
+                __strQuery.append("   select 1 from sml_ic_function_stock_balance_warehouse_location(current_date, ic_inventory.code, '', '') stk_wh ");
+                __strQuery.append("   where stk_wh.balance_qty > 0 and stk_wh.warehouse in ('" + whIn + "') ");
+                __strQuery.append(" ) ");
+                flag = 1;
                 __strWarehouseQuerySub.append(__warehouse);
-                flag = 1;
-            }
-            if (!__shelfFrom.isEmpty() && __shelfTo.isEmpty()) {
-                __strShelfQuerySub.append(__shelfFrom);
-                flag = 1;
-            } else if (!__shelfFrom.isEmpty() && !__shelfTo.isEmpty()) {
-                __strShelfQuerySub.append("select string_agg(code,',') as code from ic_shelf where code between '")
-                        .append(__shelfFrom).append("' and '").append(__shelfTo).append("'");
-                flag = 2;
             }
 
-            if (flag == 2) {
-                Statement __stmtShelf = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                ResultSet __shelfList = __stmtShelf.executeQuery(__strShelfQuerySub.toString());
-                __strShelfQuerySub = new StringBuilder();
-                while (__shelfList.next()) __strShelfQuerySub.append(__shelfList.getString("code"));
-                __shelfList.close();
-                __stmtShelf.close();
-            }
-
-            if (flag != 0) {
-                Statement __stmtIc = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-                ResultSet __icList = __stmtIc.executeQuery(__strIcQuerySub.toString());
-                __strIcQuerySub = new StringBuilder();
-                while (__icList.next()) __strIcQuerySub.append(__icList.getString("code"));
-                __icList.close();
-                __stmtIc.close();
-
-                __strQuery = new StringBuilder();
-                __strQuery.append("select ");
-                __strQuery.append("  stk.ic_code      as item_code, ");
-                __strQuery.append("  stk.ic_name      as item_name, ");
-                __strQuery.append("  stk.ic_unit_code as unit_code, ");
-                __strQuery.append("  '@shelf_code@' as shelf_list, ");
-                __strQuery.append("  '@wh_code@'    as warehouse_list, ");
-                __strQuery.append("  sum(stk.balance_qty) as balance_qty, ");
-                __strQuery.append("  coalesce((select pf.price_0 from ic_inventory_price_formula pf ");
-                __strQuery.append("    where pf.ic_code = stk.ic_code and pf.unit_code = stk.ic_unit_code ");
-                __strQuery.append("    and pf.sale_type = 2 limit 1), '0') as price_0, ");
-                __strQuery.append("  coalesce((select pf.price_9 from ic_inventory_price_formula pf ");
-                __strQuery.append("    where pf.ic_code = stk.ic_code and pf.unit_code = stk.ic_unit_code ");
-                __strQuery.append("    and pf.sale_type = 2 limit 1), '0') as price_9, ");
-                __strQuery.append("  coalesce((select d.description from ic_description d ");
-                __strQuery.append("    where d.ic_code = stk.ic_code limit 1), '') as description ");
-                __strQuery.append("from sml_ic_function_stock_balance_warehouse_location(current_date, '@ic_code@', '@wh_code@', '@shelf_code@') as stk ");
-                __strQuery.append("where stk.balance_qty > 0 ");
-                __strQuery.append("group by stk.ic_code, stk.ic_name, stk.ic_unit_code ");
-
-                __strQuery = new StringBuilder(
-                        __strQuery.toString()
-                                .replace("@ic_code@", __strIcQuerySub.toString())
-                                .replace("@wh_code@", __strWarehouseQuerySub.toString())
-                                .replace("@shelf_code@", __strShelfQuerySub.toString())
-                );
-
-                if (__sortCol.isEmpty()) {
-                    __strQuery.append(" order by stk.ic_code ").append(__sort).append(" ");
-                } else if ("balance_qty_current_year".equals(__sortCol) || "balance_qty_other_year".equals(__sortCol)) {
-                    __strQuery.append(" order by sum(stk.balance_qty) ").append(__sort).append(" ");
-                } else {
-                    __strQuery.append(" order by ").append(__sortCol).append(" ").append(__sort).append(" ");
+            // resolvedShelfList ถูก resolve แล้วด้านบน — ใช้ EXISTS กรอง row เท่านั้น
+            if (!resolvedShelfList.isEmpty()) {
+                String[] shelfVals = resolvedShelfList.split(",");
+                StringBuilder shelfIn = new StringBuilder();
+                for (String sh : shelfVals) {
+                    if (shelfIn.length() > 0) shelfIn.append("','");
+                    shelfIn.append(sh.trim());
                 }
+                __strQuery.append(" and exists ( ");
+                __strQuery.append("   select 1 from sml_ic_function_stock_balance_warehouse_location(current_date, ic_inventory.code, '', '') stk_sh ");
+                __strQuery.append("   where stk_sh.balance_qty > 0 and stk_sh.location in ('" + shelfIn + "') ");
+                __strQuery.append(" ) ");
+                flag = 1;
+            }
+
+            if (__sortCol.isEmpty()) {
+                __strQuery.append(" order by ic_inventory.code ").append(__sort).append(" ");
             } else {
-                if (__sortCol.isEmpty()) {
-                    __strQuery.append(" order by ic_inventory.code ").append(__sort).append(" ");
-                } else if ("balance_qty_current_year".equals(__sortCol) || "balance_qty_other_year".equals(__sortCol)) {
-                    // ORDER BY จะอยู่ใน outer wrapper query แทน
-                } else {
-                    __strQuery.append(" order by ").append(__sortCol).append(" ").append(__sort).append(" ");
-                }
+                __strQuery.append(" order by ").append(__sortCol).append(" ").append(__sort).append(" ");
             }
 
+            // ---------- execute data (LIMIT+1 to detect hasNext, no count query) ----------
             String __strPaginationQuery = " OFFSET " + intOffset + " LIMIT " + (intLimit + 1);
-            String __finalQuery;
-            if (!__sortCol.isEmpty() && ("balance_qty_current_year".equals(__sortCol) || "balance_qty_other_year".equals(__sortCol)) && flag == 0) {
-                __finalQuery = "SELECT * FROM (" + __strQuery.toString() + ") AS _sorted ORDER BY " + __sortCol + " " + __sort + " NULLS LAST" + __strPaginationQuery;
-            } else {
-                __finalQuery = __strQuery.toString() + __strPaginationQuery;
-            }
+            System.out.println("__strQuery.toString() " + __strQuery.toString() + __strPaginationQuery);
             Statement __stmtData = __conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet __rsData = __stmtData.executeQuery(__finalQuery);
+            ResultSet __rsData = __stmtData.executeQuery(__strQuery.toString() + __strPaginationQuery);
 
             JSONArray __jsonArr = new JSONArray();
             int __rowCount = 0;
@@ -7532,26 +7547,23 @@ public class PurchaseOnlineService {
                 obj.put("description", __rsData.getString("description"));
                 obj.put("price", "");
                 obj.put("update_date", "");
-                if (flag != 0) {
-                    String __balQty = "";
-                    try { __balQty = __rsData.getString("balance_qty"); } catch (Exception ignored) {}
-                    obj.put("balance_qty", __balQty);
-                    obj.put("balance_qty_current_year", __balQty);
-                    obj.put("balance_qty_other_year", "0");
-                    obj.put("dot_year_list", "");
-                    obj.put("year_weak", "");
-                } else {
+                {
                     String bqCur = "", bqOth = "", dotYearList = "";
                     try { bqCur = __rsData.getString("balance_qty_current_year"); } catch (Exception ignored) {}
                     try { bqOth = __rsData.getString("balance_qty_other_year"); } catch (Exception ignored) {}
                     try { dotYearList = __rsData.getString("dot_year_list"); } catch (Exception ignored) {}
-                    double cur = bqCur != null ? Double.parseDouble(bqCur) : 0;
-                    double oth = bqOth != null ? Double.parseDouble(bqOth) : 0;
+                    double cur = 0, oth = 0;
+                    try { cur = (bqCur != null && !bqCur.isEmpty()) ? Double.parseDouble(bqCur.replace(",","")) : 0; } catch (Exception ignored) {}
+                    try { oth = (bqOth != null && !bqOth.isEmpty()) ? Double.parseDouble(bqOth.replace(",","")) : 0; } catch (Exception ignored) {}
                     obj.put("balance_qty_current_year", String.format("%,.0f", cur));
                     obj.put("balance_qty_other_year", String.format("%,.0f", oth));
                     obj.put("balance_qty", String.format("%,.0f", cur + oth));
                     obj.put("dot_year_list", dotYearList != null ? dotYearList : "");
                     obj.put("year_weak", "");
+                    if (flag != 0) {
+                        obj.put("shelf_list", resolvedShelfList);
+                        obj.put("warehouse_list", __warehouse);
+                    }
                 }
                 __jsonArr.put(obj);
             }
@@ -7584,7 +7596,7 @@ public class PurchaseOnlineService {
             @QueryParam("warehouse") String strWarehouse
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
@@ -7667,7 +7679,7 @@ public class PurchaseOnlineService {
             @QueryParam("sale_type") String strSaleType
     ) {
         String strProvider = "DATA";
-        String strDatabaseName = "data2";
+        String strDatabaseName = "kbg";
         JSONObject __objResponse = new JSONObject();
         __objResponse.put("success", false);
 
